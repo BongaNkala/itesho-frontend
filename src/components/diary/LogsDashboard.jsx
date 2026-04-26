@@ -1,3 +1,5 @@
+const API_URL = 'https://bongankala.pythonanywhere.com';
+
 import { useState, useEffect } from 'react';
 import { Search, ClipboardList, Clock, CheckCircle, FileText, Sparkles, Filter, AlertCircle, XCircle, MinusCircle } from 'lucide-react';
 

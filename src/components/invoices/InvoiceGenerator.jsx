@@ -1,5 +1,7 @@
 const API_URL = 'https://bongankala.pythonanywhere.com';
 
+const API_URL = 'https://bongankala.pythonanywhere.com';
+
 import { useState, useEffect } from 'react';
 import { DollarSign } from 'lucide-react';
 

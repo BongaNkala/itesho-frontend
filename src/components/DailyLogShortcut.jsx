@@ -1,3 +1,5 @@
+const API_URL = 'https://bongankala.pythonanywhere.com';
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ClipboardList, Clock, ArrowRight } from 'lucide-react';
