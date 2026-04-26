@@ -81,10 +81,10 @@ function Dashboard() {
 
     try {
       const [projectsRes, logsRes] = await Promise.all([
-        fetch('${API_URL}/api/projects/', {
+        fetch(`${API_URL}/api/projects/', {
           headers: { Authorization: `Bearer ${token}` }
         }),
-        fetch('${API_URL}/api/daily-logs/', {
+        fetch(`${API_URL}/api/daily-logs/', {
           headers: { Authorization: `Bearer ${token}` }
         })
       ]);

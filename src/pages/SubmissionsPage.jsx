@@ -22,7 +22,7 @@ function SubmissionsPage() {
     }
 
     try {
-      const response = await fetch('${API_URL}/api/daily-logs/', {
+      const response = await fetch(`${API_URL}/api/daily-logs/', {
         headers: { 'Authorization': `Bearer ${token}` },
       });
       

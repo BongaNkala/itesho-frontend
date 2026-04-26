@@ -17,7 +17,7 @@ function DailySubmissions() {
   const fetchSubmissions = async () => {
     setLoading(true);
     try {
-      const response = await fetch('${API_URL}/api/daily-logs/', {
+      const response = await fetch(`${API_URL}/api/daily-logs/', {
         headers: { 'Authorization': `Bearer ${getToken()}` },
       });
       const data = await response.json();

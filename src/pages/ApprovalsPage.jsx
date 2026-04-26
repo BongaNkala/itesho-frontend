@@ -27,7 +27,7 @@ function ApprovalsPage() {
   const fetchSubmissions = async () => {
     setLoading(true);
     try {
-      const res = await fetch('${API_URL}/api/daily-logs/', {
+      const res = await fetch(`${API_URL}/api/daily-logs/', {
         headers: { 'Authorization': `Bearer ${getToken()}` },
       });
       const data = await res.json();

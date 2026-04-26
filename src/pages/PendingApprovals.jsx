@@ -38,7 +38,7 @@ function PendingApprovals() {
 
   const fetchPendingLogs = async () => {
     try {
-      const response = await fetch('${API_URL}/api/pending-approvals/', {
+      const response = await fetch(`${API_URL}/api/pending-approvals/', {
         headers: { 'Authorization': `Bearer ${getToken()}` },
       });
       const data = await response.json();

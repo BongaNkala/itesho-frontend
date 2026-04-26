@@ -30,7 +30,7 @@ function Projects() {
     }
 
     try {
-      const response = await fetch('${API_URL}/api/projects/', {
+      const response = await fetch(`${API_URL}/api/projects/', {
         headers: { 'Authorization': `Bearer ${token}` },
       });
 

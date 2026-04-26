@@ -61,7 +61,7 @@ function InspectionManager({ projectId, boqItemId }) {
 
   const submitInspection = async (pointId) => {
     try {
-      const response = await fetch('${API_URL}/api/inspection-records/', {
+      const response = await fetch(`${API_URL}/api/inspection-records/', {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${getToken()}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({

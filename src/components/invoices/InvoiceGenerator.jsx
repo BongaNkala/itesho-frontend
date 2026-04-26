@@ -35,7 +35,7 @@ function InvoiceGenerator({ projectId }) {
     }
     setGenerating(true);
     try {
-      const response = await fetch('${API_URL}/api/invoices/generate_from_period/', {
+      const response = await fetch(`${API_URL}/api/invoices/generate_from_period/', {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${getToken()}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ project_id: projectId, period_start: periodStart, period_end: periodEnd }),

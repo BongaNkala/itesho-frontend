@@ -32,7 +32,7 @@ function ProjectRequirementsForm({ isOpen, onClose, projectId, onSuccess }) {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('${API_URL}/api/categories/', {
+      const response = await fetch(`${API_URL}/api/categories/', {
         headers: { 'Authorization': `Bearer ${getToken()}` },
       });
       const data = await response.json();
@@ -122,7 +122,7 @@ function ProjectRequirementsForm({ isOpen, onClose, projectId, onSuccess }) {
     formData.append('version', '1.0');
 
     try {
-      const response = await fetch('${API_URL}/api/documents/', {
+      const response = await fetch(`${API_URL}/api/documents/', {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${getToken()}` },
         body: formData,

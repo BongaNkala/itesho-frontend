@@ -135,7 +135,7 @@ function DailyLogForm({ projectId, onSuccess }) {
       
       console.log('Submitting payload:', logPayload);
       
-      const logResponse = await fetch('${API_URL}/api/daily-logs/', {
+      const logResponse = await fetch(`${API_URL}/api/daily-logs/', {
         method: 'POST',
         headers: { 
           'Authorization': `Bearer ${token}`, 
