@@ -81,10 +81,10 @@ function Dashboard() {
 
     try {
       const [projectsRes, logsRes] = await Promise.all([
-        fetch('http://127.0.0.1:8000/api/projects/', {
+        fetch('${API_URL}/api/projects/', {
           headers: { Authorization: `Bearer ${token}` }
         }),
-        fetch('http://127.0.0.1:8000/api/daily-logs/', {
+        fetch('${API_URL}/api/daily-logs/', {
           headers: { Authorization: `Bearer ${token}` }
         })
       ]);
@@ -240,7 +240,7 @@ function Dashboard() {
 
         {/* Pending Approvals Card */}
         <div 
-          onClick={() => window.open('http://127.0.0.1:8000/admin/core/dailylog/', '_blank')}
+          onClick={() => window.open('${API_URL}/admin/core/dailylog/', '_blank')}
           className="group backdrop-blur-md bg-white/20 rounded-xl p-4 border border-white/20 shadow-lg cursor-pointer transition-all duration-300 hover:scale-105 hover:bg-white/30 hover:shadow-2xl"
         >
           <div className="flex justify-between items-start">

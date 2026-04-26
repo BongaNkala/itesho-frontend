@@ -16,7 +16,7 @@ function DailyLogShortcut({ projectId }) {
 
   const fetchStats = async () => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/daily-logs/?project_id=${projectId}`, {
+      const response = await fetch(`${API_URL}/api/daily-logs/?project_id=${projectId}`, {
         headers: { 'Authorization': `Bearer ${getToken()}` },
       });
       const data = await response.json();

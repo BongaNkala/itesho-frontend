@@ -21,7 +21,7 @@ function DocumentUpload({ projectId, onUploadComplete }) {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/categories/', {
+      const response = await fetch('${API_URL}/api/categories/', {
         headers: { 'Authorization': `Bearer ${getToken()}` },
       });
       const data = await response.json();
@@ -56,7 +56,7 @@ function DocumentUpload({ projectId, onUploadComplete }) {
     if (expiryDate) formData.append('expiry_date', expiryDate);
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/documents/', {
+      const response = await fetch('${API_URL}/api/documents/', {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${getToken()}` },
         body: formData,

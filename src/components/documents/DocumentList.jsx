@@ -15,7 +15,7 @@ function DocumentList({ projectId }) {
   const fetchDocuments = async () => {
     setLoading(true);
     try {
-      let url = `http://127.0.0.1:8000/api/documents/?project_id=${projectId}`;
+      let url = `${API_URL}/api/documents/?project_id=${projectId}`;
       if (filter === 'active') url += '&is_latest=true&status=active';
       if (filter === 'pending') url += '&status=pending';
       

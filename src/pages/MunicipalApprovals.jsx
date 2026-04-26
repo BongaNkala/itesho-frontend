@@ -21,7 +21,7 @@ function MunicipalApprovals() {
   const fetchSubmissions = async () => {
     setLoading(true);
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/daily-logs/', {
+      const res = await fetch('${API_URL}/api/daily-logs/', {
         headers: { 'Authorization': `Bearer ${getToken()}` },
       });
       const data = await res.json();
@@ -41,7 +41,7 @@ function MunicipalApprovals() {
     }
     
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/daily-logs/${id}/municipal-approve/`, {
+      const res = await fetch(`${API_URL}/api/daily-logs/${id}/municipal-approve/`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${getToken()}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ 

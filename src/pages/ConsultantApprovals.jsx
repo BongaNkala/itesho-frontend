@@ -19,7 +19,7 @@ function ConsultantApprovals() {
   const fetchSubmissions = async () => {
     setLoading(true);
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/daily-logs/', {
+      const res = await fetch('${API_URL}/api/daily-logs/', {
         headers: { 'Authorization': `Bearer ${getToken()}` },
       });
       const data = await res.json();
@@ -34,7 +34,7 @@ function ConsultantApprovals() {
 
   const handleRateCheck = async (id, action) => {
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/daily-logs/${id}/rate-check/`, {
+      const res = await fetch(`${API_URL}/api/daily-logs/${id}/rate-check/`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${getToken()}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ 

@@ -38,7 +38,7 @@ function PendingApprovals() {
 
   const fetchPendingLogs = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/pending-approvals/', {
+      const response = await fetch('${API_URL}/api/pending-approvals/', {
         headers: { 'Authorization': `Bearer ${getToken()}` },
       });
       const data = await response.json();
@@ -59,7 +59,7 @@ function PendingApprovals() {
 
   const handleApprove = async (log) => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/daily-logs/${log.id}/approve/`, {
+      const response = await fetch(`${API_URL}/api/daily-logs/${log.id}/approve/`, {
         method: 'POST',
         headers: { 
           'Authorization': `Bearer ${getToken()}`,
@@ -90,7 +90,7 @@ function PendingApprovals() {
 
   const handleReject = async (log) => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/daily-logs/${log.id}/reject/`, {
+      const response = await fetch(`${API_URL}/api/daily-logs/${log.id}/reject/`, {
         method: 'POST',
         headers: { 
           'Authorization': `Bearer ${getToken()}`,

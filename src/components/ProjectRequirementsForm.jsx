@@ -32,7 +32,7 @@ function ProjectRequirementsForm({ isOpen, onClose, projectId, onSuccess }) {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/categories/', {
+      const response = await fetch('${API_URL}/api/categories/', {
         headers: { 'Authorization': `Bearer ${getToken()}` },
       });
       const data = await response.json();
@@ -44,7 +44,7 @@ function ProjectRequirementsForm({ isOpen, onClose, projectId, onSuccess }) {
 
   const fetchDocuments = async () => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/documents/?project_id=${projectId}`, {
+      const response = await fetch(`${API_URL}/api/documents/?project_id=${projectId}`, {
         headers: { 'Authorization': `Bearer ${getToken()}` },
       });
       const data = await response.json();
@@ -122,7 +122,7 @@ function ProjectRequirementsForm({ isOpen, onClose, projectId, onSuccess }) {
     formData.append('version', '1.0');
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/documents/', {
+      const response = await fetch('${API_URL}/api/documents/', {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${getToken()}` },
         body: formData,
@@ -172,7 +172,7 @@ function ProjectRequirementsForm({ isOpen, onClose, projectId, onSuccess }) {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/projects/${projectId}/requirements/`, {
+      const response = await fetch(`${API_URL}/api/projects/${projectId}/requirements/`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${getToken()}`, 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),

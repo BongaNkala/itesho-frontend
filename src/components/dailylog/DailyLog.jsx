@@ -45,7 +45,7 @@ function DailyLogForm({ projectId, onSuccess }) {
 
   const fetchBOQItems = async () => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/boq/?project_id=${projectId}`, {
+      const response = await fetch(`${API_URL}/api/boq/?project_id=${projectId}`, {
         headers: { 'Authorization': `Bearer ${getToken()}` },
       });
       const data = await response.json();
@@ -135,7 +135,7 @@ function DailyLogForm({ projectId, onSuccess }) {
       
       console.log('Submitting payload:', logPayload);
       
-      const logResponse = await fetch('http://127.0.0.1:8000/api/daily-logs/', {
+      const logResponse = await fetch('${API_URL}/api/daily-logs/', {
         method: 'POST',
         headers: { 
           'Authorization': `Bearer ${token}`, 
@@ -168,7 +168,7 @@ function DailyLogForm({ projectId, onSuccess }) {
           notes: entry.notes
         };
         
-        const entryResponse = await fetch(`http://127.0.0.1:8000/api/daily-logs/${log.id}/add_entry/`, {
+        const entryResponse = await fetch(`${API_URL}/api/daily-logs/${log.id}/add_entry/`, {
           method: 'POST',
           headers: { 
             'Authorization': `Bearer ${token}`, 

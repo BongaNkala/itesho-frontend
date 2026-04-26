@@ -35,7 +35,7 @@ function InspectionManager({ projectId, boqItemId }) {
   const fetchInspectionPoints = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/inspection-points/?boq_item_id=${boqItemId}`, {
+      const response = await fetch(`${API_URL}/api/inspection-points/?boq_item_id=${boqItemId}`, {
         headers: { 'Authorization': `Bearer ${getToken()}` },
       });
       const data = await response.json();
@@ -49,7 +49,7 @@ function InspectionManager({ projectId, boqItemId }) {
 
   const fetchMonthlyInspections = async () => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/monthly-inspections/?project_id=${projectId}&month=${selectedMonth}`, {
+      const response = await fetch(`${API_URL}/api/monthly-inspections/?project_id=${projectId}&month=${selectedMonth}`, {
         headers: { 'Authorization': `Bearer ${getToken()}` },
       });
       const data = await response.json();
@@ -61,7 +61,7 @@ function InspectionManager({ projectId, boqItemId }) {
 
   const submitInspection = async (pointId) => {
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/inspection-records/', {
+      const response = await fetch('${API_URL}/api/inspection-records/', {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${getToken()}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -17,7 +17,7 @@ function DailySubmissions() {
   const fetchSubmissions = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/daily-logs/', {
+      const response = await fetch('${API_URL}/api/daily-logs/', {
         headers: { 'Authorization': `Bearer ${getToken()}` },
       });
       const data = await response.json();
@@ -31,7 +31,7 @@ function DailySubmissions() {
 
   const handleApprove = async (id) => {
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/daily-logs/${id}/approve/`, {
+      const res = await fetch(`${API_URL}/api/daily-logs/${id}/approve/`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${getToken()}` },
       });
@@ -46,7 +46,7 @@ function DailySubmissions() {
 
   const handleReject = async (id) => {
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/daily-logs/${id}/reject/`, {
+      const res = await fetch(`${API_URL}/api/daily-logs/${id}/reject/`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${getToken()}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason: reviewNotes }),

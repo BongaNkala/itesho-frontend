@@ -16,7 +16,7 @@ function InvoiceGenerator({ projectId }) {
 
   const fetchInvoices = async () => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/invoices/?project_id=${projectId}`, {
+      const response = await fetch(`${API_URL}/api/invoices/?project_id=${projectId}`, {
         headers: { 'Authorization': `Bearer ${getToken()}` },
       });
       const data = await response.json();
@@ -35,7 +35,7 @@ function InvoiceGenerator({ projectId }) {
     }
     setGenerating(true);
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/invoices/generate_from_period/', {
+      const response = await fetch('${API_URL}/api/invoices/generate_from_period/', {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${getToken()}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ project_id: projectId, period_start: periodStart, period_end: periodEnd }),

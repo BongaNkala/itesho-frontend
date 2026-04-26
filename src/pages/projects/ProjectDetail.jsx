@@ -36,7 +36,7 @@ function ProjectDetail() {
     }
 
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/projects/${id}/`, {
+      const response = await fetch(`${API_URL}/api/projects/${id}/`, {
         headers: { 'Authorization': `Bearer ${token}` },
       });
       if (response.status === 401) { 
@@ -58,7 +58,7 @@ function ProjectDetail() {
     if (!token) return;
 
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/boq/?project_id=${id}`, {
+      const response = await fetch(`${API_URL}/api/boq/?project_id=${id}`, {
         headers: { 'Authorization': `Bearer ${token}` },
       });
       const data = await response.json();
