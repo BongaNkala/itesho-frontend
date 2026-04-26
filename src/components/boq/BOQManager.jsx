@@ -21,15 +21,27 @@ function BOQManager({ projectId }) {
       const response = await fetch(`${API_URL}/api/boq/?project_id=${projectId}`, {
         headers: { 'Authorization': `Bearer ${getToken()}` },
       });
-      const data = await response.json();
-      console.log('BOQ Data:', data);
+      let data = await response.json();
+      
+      // Build tree structure if data is flat
+      if (data.length > 0 && !data[0].children) {
+        data = buildTreeStructure(data);
+      }
+      
+      console.log('BOQ Data with tree:', data);
       setBoqItems(data);
+      
+      // Initialize expanded state for all items with children
       const initialExpanded = {};
-      data.forEach(item => {
-        if (item.children && item.children.length > 0) {
-          initialExpanded[item.id] = true;
-        }
-      });
+      const setExpandedRecursive = (items) => {
+        items.forEach(item => {
+          if (item.children && item.children.length > 0) {
+            initialExpanded[item.id] = true;
+            setExpandedRecursive(item.children);
+          }
+        });
+      };
+      setExpandedRecursive(data);
       setExpandedItems(initialExpanded);
       calculateSummary(data);
     } catch (err) {
@@ -39,11 +51,48 @@ function BOQManager({ projectId }) {
     }
   };
 
+  // Function to build tree structure from flat data
+  const buildTreeStructure = (items) => {
+    const itemMap = new Map();
+    const roots = [];
+    
+    // First, map all items by id
+    items.forEach(item => {
+      itemMap.set(item.id, { ...item, children: [] });
+    });
+    
+    // Then, build parent-child relationships
+    items.forEach(item => {
+      const mappedItem = itemMap.get(item.id);
+      if (item.parent && itemMap.has(item.parent)) {
+        const parent = itemMap.get(item.parent);
+        parent.children.push(mappedItem);
+      } else {
+        roots.push(mappedItem);
+      }
+    });
+    
+    // Sort roots by item_code
+    roots.sort((a, b) => a.item_code?.localeCompare(b.item_code) || 0);
+    
+    // Sort children recursively
+    const sortChildren = (node) => {
+      if (node.children && node.children.length > 0) {
+        node.children.sort((a, b) => a.item_code?.localeCompare(b.item_code) || 0);
+        node.children.forEach(sortChildren);
+      }
+    };
+    roots.forEach(sortChildren);
+    
+    return roots;
+  };
+
   const calculateSummary = (items) => {
     let totalPlanned = 0, totalApproved = 0;
     const flatten = (itemList) => {
       for (const item of itemList) {
-        if (item.level === 3) {
+        // Only count level 3 items or items without children
+        if (item.level === 3 || (item.children && item.children.length === 0)) {
           totalPlanned += (Number(item.planned_quantity) || 0) * (Number(item.rate) || 0);
           totalApproved += (Number(item.approved_quantity) || 0) * (Number(item.rate) || 0);
         }
@@ -90,10 +139,7 @@ function BOQManager({ projectId }) {
             <div className="w-6 flex justify-center">
               {hasChildren ? (
                 <button 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleExpand(item.id);
-                  }} 
+                  onClick={() => toggleExpand(item.id)} 
                   className="p-0.5 hover:bg-gray-200 rounded transition-colors cursor-pointer"
                 >
                   {isExpanded ? <ChevronDown className="h-3 w-3 text-gray-500" /> : <ChevronRight className="h-3 w-3 text-gray-500" />}
@@ -142,7 +188,7 @@ function BOQManager({ projectId }) {
 
   return (
     <div className="space-y-4">
-      {/* Summary Cards - Compact Design */}
+      {/* Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <div className="bg-white rounded-lg border border-gray-100 p-3 shadow-sm">
           <div className="text-[10px] font-medium text-gray-400 uppercase tracking-wider">Planned Cost</div>
@@ -163,7 +209,7 @@ function BOQManager({ projectId }) {
         </div>
       </div>
 
-      {/* BOQ Table - Compact Design */}
+      {/* BOQ Table */}
       <div className="bg-white rounded-lg border border-gray-100 shadow-sm overflow-hidden">
         <div className="px-3 py-2 border-b border-gray-100 bg-gray-50/50">
           <div className="flex items-center gap-1.5">
