@@ -24,11 +24,9 @@ function BOQManager({ projectId }) {
       const data = await response.json();
       console.log('Raw BOQ Data:', data);
       
-      // Build tree structure based on item_code hierarchy
       const tree = buildTreeFromItemCode(data);
       setBoqItems(tree);
       
-      // Initialize expanded state for all items with children
       const initialExpanded = {};
       const setExpandedRecursive = (items) => {
         items.forEach(item => {
@@ -48,9 +46,7 @@ function BOQManager({ projectId }) {
     }
   };
 
-  // Build tree structure based on item_code hierarchy (e.g., "01", "01.01", "01.01.01")
   const buildTreeFromItemCode = (items) => {
-    // First, create a map of items by their item_code
     const itemMap = new Map();
     items.forEach(item => {
       itemMap.set(item.item_code, { ...item, children: [] });
@@ -58,29 +54,24 @@ function BOQManager({ projectId }) {
 
     const roots = [];
     
-    // Group items by their parent based on item_code
     items.forEach(item => {
       const code = item.item_code;
       const parts = code.split('.');
       const mappedItem = itemMap.get(code);
       
       if (parts.length === 1) {
-        // Top level item (e.g., "01")
         roots.push(mappedItem);
       } else {
-        // Find parent (e.g., for "01.01", parent is "01")
         const parentCode = parts.slice(0, -1).join('.');
         const parent = itemMap.get(parentCode);
         if (parent) {
           parent.children.push(mappedItem);
         } else {
-          // If parent not found, treat as root
           roots.push(mappedItem);
         }
       }
     });
 
-    // Sort items within each level by item_code
     const sortChildren = (node) => {
       if (node.children && node.children.length > 0) {
         node.children.sort((a, b) => a.item_code.localeCompare(b.item_code));
@@ -98,7 +89,6 @@ function BOQManager({ projectId }) {
     let totalPlanned = 0, totalApproved = 0;
     const flatten = (itemList) => {
       for (const item of itemList) {
-        // Calculate based on the item's own quantity (not rolled up)
         totalPlanned += (Number(item.planned_quantity) || 0) * (Number(item.rate) || 0);
         totalApproved += (Number(item.approved_quantity) || 0) * (Number(item.rate) || 0);
         if (item.children && item.children.length > 0) {
@@ -129,6 +119,19 @@ function BOQManager({ projectId }) {
     );
   };
 
+  const getBackgroundColor = (level, hasChildren) => {
+    // Parent items (level 0) - dark blue/slate
+    if (level === 0) {
+      return 'bg-slate-100 hover:bg-slate-200';
+    }
+    // Level 1 children - lighter gray
+    if (level === 1) {
+      return 'bg-gray-50 hover:bg-gray-100';
+    }
+    // Level 2 and deeper - very light gray/white
+    return 'bg-white hover:bg-gray-50';
+  };
+
   const renderBOQItem = (item, level = 0) => {
     const isExpanded = expandedItems[item.id];
     const hasChildren = item.children && item.children.length > 0;
@@ -137,27 +140,35 @@ function BOQManager({ projectId }) {
     const approvedQty = Number(item.approved_quantity) || 0;
     const plannedQty = Number(item.planned_quantity) || 0;
     const rate = Number(item.rate) || 0;
-    const bgColor = level === 0 ? 'bg-gray-50' : level === 1 ? 'bg-white' : '';
+    const bgColor = getBackgroundColor(level, hasChildren);
+    
+    // Different text colors based on level
+    const textColor = level === 0 ? 'text-gray-900 font-semibold' : 'text-gray-700';
+    const borderStyle = level === 0 ? 'border-l-2 border-l-orange-400' : '';
 
     return (
       <div key={item.id}>
-        <div className={`border-b border-gray-100 hover:bg-gray-50/80 transition-colors ${bgColor}`}>
+        <div className={`border-b border-gray-100 transition-colors ${bgColor} ${borderStyle}`}>
           <div className="flex items-center py-2 px-3" style={{ paddingLeft: `${paddingLeft + 12}px` }}>
             <div className="w-6 flex justify-center">
               {hasChildren ? (
                 <button 
                   onClick={() => toggleExpand(item.id)} 
-                  className="p-0.5 hover:bg-gray-200 rounded transition-colors cursor-pointer"
+                  className="p-0.5 hover:bg-gray-300 rounded transition-colors cursor-pointer"
                 >
-                  {isExpanded ? <ChevronDown className="h-3 w-3 text-gray-500" /> : <ChevronRight className="h-3 w-3 text-gray-500" />}
+                  {isExpanded ? (
+                    <ChevronDown className="h-3 w-3 text-gray-600" />
+                  ) : (
+                    <ChevronRight className="h-3 w-3 text-gray-600" />
+                  )}
                 </button>
               ) : (
                 <span className="w-4"></span>
               )}
             </div>
             <div className="flex-1 grid grid-cols-12 gap-2 text-xs">
-              <div className="col-span-2 font-medium text-gray-700">{item.item_code}</div>
-              <div className="col-span-3 text-gray-600">{item.description}</div>
+              <div className={`col-span-2 ${textColor}`}>{item.item_code}</div>
+              <div className={`col-span-3 ${textColor}`}>{item.description}</div>
               <div className="col-span-1 text-gray-500">{item.unit}</div>
               <div className="col-span-1 text-right text-gray-600">{plannedQty.toLocaleString()}</div>
               <div className="col-span-1 text-right text-gray-600">R{rate.toLocaleString()}</div>
@@ -227,8 +238,8 @@ function BOQManager({ projectId }) {
         </div>
         
         {/* Table Header */}
-        <div className="bg-gray-50 py-1.5 px-3 border-b border-gray-100 min-w-[900px]">
-          <div className="grid grid-cols-12 gap-2 text-[10px] font-semibold text-gray-500 uppercase tracking-wider ml-6">
+        <div className="bg-gray-100 py-1.5 px-3 border-b border-gray-200 min-w-[900px]">
+          <div className="grid grid-cols-12 gap-2 text-[10px] font-semibold text-gray-600 uppercase tracking-wider ml-6">
             <div className="col-span-2">Item ID</div>
             <div className="col-span-3">Description</div>
             <div className="col-span-1">Unit</div>
@@ -241,7 +252,7 @@ function BOQManager({ projectId }) {
         </div>
         
         {/* Table Body */}
-        <div className="divide-y divide-gray-50">
+        <div>
           {boqItems.map(item => renderBOQItem(item, 0))}
         </div>
       </div>
