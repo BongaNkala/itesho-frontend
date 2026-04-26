@@ -21,15 +21,12 @@ function BOQManager({ projectId }) {
       const response = await fetch(`${API_URL}/api/boq/?project_id=${projectId}`, {
         headers: { 'Authorization': `Bearer ${getToken()}` },
       });
-      let data = await response.json();
+      const data = await response.json();
+      console.log('Raw BOQ Data:', data);
       
-      // Build tree structure if data is flat
-      if (data.length > 0 && !data[0].children) {
-        data = buildTreeStructure(data);
-      }
-      
-      console.log('BOQ Data with tree:', data);
-      setBoqItems(data);
+      // Build tree structure based on item_code hierarchy
+      const tree = buildTreeFromItemCode(data);
+      setBoqItems(tree);
       
       // Initialize expanded state for all items with children
       const initialExpanded = {};
@@ -41,9 +38,9 @@ function BOQManager({ projectId }) {
           }
         });
       };
-      setExpandedRecursive(data);
+      setExpandedRecursive(tree);
       setExpandedItems(initialExpanded);
-      calculateSummary(data);
+      calculateSummary(tree);
     } catch (err) {
       console.error('Failed to fetch BOQ:', err);
     } finally {
@@ -51,37 +48,47 @@ function BOQManager({ projectId }) {
     }
   };
 
-  // Function to build tree structure from flat data
-  const buildTreeStructure = (items) => {
+  // Build tree structure based on item_code hierarchy (e.g., "01", "01.01", "01.01.01")
+  const buildTreeFromItemCode = (items) => {
+    // First, create a map of items by their item_code
     const itemMap = new Map();
+    items.forEach(item => {
+      itemMap.set(item.item_code, { ...item, children: [] });
+    });
+
     const roots = [];
     
-    // First, map all items by id
+    // Group items by their parent based on item_code
     items.forEach(item => {
-      itemMap.set(item.id, { ...item, children: [] });
-    });
-    
-    // Then, build parent-child relationships
-    items.forEach(item => {
-      const mappedItem = itemMap.get(item.id);
-      if (item.parent && itemMap.has(item.parent)) {
-        const parent = itemMap.get(item.parent);
-        parent.children.push(mappedItem);
-      } else {
+      const code = item.item_code;
+      const parts = code.split('.');
+      const mappedItem = itemMap.get(code);
+      
+      if (parts.length === 1) {
+        // Top level item (e.g., "01")
         roots.push(mappedItem);
+      } else {
+        // Find parent (e.g., for "01.01", parent is "01")
+        const parentCode = parts.slice(0, -1).join('.');
+        const parent = itemMap.get(parentCode);
+        if (parent) {
+          parent.children.push(mappedItem);
+        } else {
+          // If parent not found, treat as root
+          roots.push(mappedItem);
+        }
       }
     });
-    
-    // Sort roots by item_code
-    roots.sort((a, b) => a.item_code?.localeCompare(b.item_code) || 0);
-    
-    // Sort children recursively
+
+    // Sort items within each level by item_code
     const sortChildren = (node) => {
       if (node.children && node.children.length > 0) {
-        node.children.sort((a, b) => a.item_code?.localeCompare(b.item_code) || 0);
+        node.children.sort((a, b) => a.item_code.localeCompare(b.item_code));
         node.children.forEach(sortChildren);
       }
     };
+    
+    roots.sort((a, b) => a.item_code.localeCompare(b.item_code));
     roots.forEach(sortChildren);
     
     return roots;
@@ -91,12 +98,12 @@ function BOQManager({ projectId }) {
     let totalPlanned = 0, totalApproved = 0;
     const flatten = (itemList) => {
       for (const item of itemList) {
-        // Only count level 3 items or items without children
-        if (item.level === 3 || (item.children && item.children.length === 0)) {
-          totalPlanned += (Number(item.planned_quantity) || 0) * (Number(item.rate) || 0);
-          totalApproved += (Number(item.approved_quantity) || 0) * (Number(item.rate) || 0);
+        // Calculate based on the item's own quantity (not rolled up)
+        totalPlanned += (Number(item.planned_quantity) || 0) * (Number(item.rate) || 0);
+        totalApproved += (Number(item.approved_quantity) || 0) * (Number(item.rate) || 0);
+        if (item.children && item.children.length > 0) {
+          flatten(item.children);
         }
-        if (item.children) flatten(item.children);
       }
     };
     flatten(items);
@@ -126,11 +133,11 @@ function BOQManager({ projectId }) {
     const isExpanded = expandedItems[item.id];
     const hasChildren = item.children && item.children.length > 0;
     const paddingLeft = level * 20;
-    const progress = Number(item.progress_percentage) || 0;
+    const progress = (Number(item.approved_quantity) / Number(item.planned_quantity)) * 100 || 0;
     const approvedQty = Number(item.approved_quantity) || 0;
     const plannedQty = Number(item.planned_quantity) || 0;
     const rate = Number(item.rate) || 0;
-    const bgColor = item.level === 1 ? 'bg-gray-50' : item.level === 2 ? 'bg-white' : '';
+    const bgColor = level === 0 ? 'bg-gray-50' : level === 1 ? 'bg-white' : '';
 
     return (
       <div key={item.id}>
@@ -161,7 +168,7 @@ function BOQManager({ projectId }) {
           </div>
         </div>
         {isExpanded && hasChildren && (
-          <div className="border-t border-gray-50">
+          <div>
             {item.children.map(child => renderBOQItem(child, level + 1))}
           </div>
         )}
