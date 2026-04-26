@@ -1,3 +1,5 @@
+const API_URL = 'https://bongankala.pythonanywhere.com';
+
 import { useState, useEffect } from 'react';
 import { ChevronDown, ChevronRight, Sparkles } from 'lucide-react';
 
