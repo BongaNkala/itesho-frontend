@@ -89,7 +89,13 @@ function BOQManager({ projectId }) {
           <div className="flex items-center py-2 px-3" style={{ paddingLeft: `${paddingLeft + 12}px` }}>
             <div className="w-6 flex justify-center">
               {hasChildren ? (
-                <button onClick={() => toggleExpand(item.id)} className="p-0.5 hover:bg-gray-200 rounded transition-colors">
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleExpand(item.id);
+                  }} 
+                  className="p-0.5 hover:bg-gray-200 rounded transition-colors cursor-pointer"
+                >
                   {isExpanded ? <ChevronDown className="h-3 w-3 text-gray-500" /> : <ChevronRight className="h-3 w-3 text-gray-500" />}
                 </button>
               ) : (
