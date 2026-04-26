@@ -1,7 +1,5 @@
 const API_URL = 'https://bongankala.pythonanywhere.com';
 
-const API_URL = 'https://bongankala.pythonanywhere.com';
-
 import { useState, useEffect } from 'react';
 import { Sparkles, Sun, Cloud, CloudRain, Wind, Droplets, Thermometer, Users, Truck, FileText, ClipboardList, AlertCircle, Plus, Trash2, Calendar, Clock, Send } from 'lucide-react';
 
