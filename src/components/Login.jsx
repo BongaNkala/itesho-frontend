@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { Building2, Lock, Mail, Sparkles, CheckCircle2, TrendingUp, Shield, Users, Clock, Award, Target, Globe, Zap, Rocket, Star, Compass } from 'lucide-react';
 
+// API Configuration
+const API_URL = import.meta.env.VITE_API_URL || 'https://bongankala.pythonanywhere.com';
+
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -13,7 +16,7 @@ function Login() {
     setMessage('Logging in...');
 
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/token/', {
+      const res = await fetch(`${API_URL}/api/token/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
@@ -21,6 +24,7 @@ function Login() {
       const data = await res.json();
       if (res.ok) {
         localStorage.setItem('access_token', data.access);
+        localStorage.setItem('refresh_token', data.refresh);
         setMessage('Success! Redirecting...');
         setTimeout(() => { window.location.href = '/dashboard'; }, 1000);
       } else {
