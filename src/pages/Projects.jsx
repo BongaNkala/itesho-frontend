@@ -1,3 +1,5 @@
+const API_URL = 'https://bongankala.pythonanywhere.com';
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Building2, MapPin, Calendar, DollarSign, TrendingUp, Sparkles, AlertCircle } from 'lucide-react';
@@ -141,7 +143,6 @@ function Projects() {
                 <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 pointer-events-none" />
                 
                 <div className="p-5">
-                  {/* Header with Status */}
                   <div className="flex items-start justify-between mb-3">
                     <h3 className="text-lg font-semibold text-white drop-shadow">{project.name}</h3>
                     <span className={`text-xs px-2 py-1 rounded-full border ${getStatusColor(project.status)} backdrop-blur-sm`}>
@@ -149,12 +150,10 @@ function Projects() {
                     </span>
                   </div>
                   
-                  {/* Description */}
                   {project.description && (
                     <p className="text-white/70 text-sm mb-3 line-clamp-2">{project.description}</p>
                   )}
                   
-                  {/* Location */}
                   {project.location && (
                     <div className="flex items-center gap-1 text-white/60 text-sm mb-2">
                       <MapPin className="h-3 w-3" />
@@ -162,13 +161,11 @@ function Projects() {
                     </div>
                   )}
                   
-                  {/* Date Range */}
                   <div className="flex items-center gap-2 text-white/60 text-sm mb-2">
                     <Calendar className="h-3 w-3" />
                     {formatDate(project.start_date)} → {formatDate(project.end_date)}
                   </div>
                   
-                  {/* Budget vs Actual */}
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-1 text-white/60 text-sm">
                       <DollarSign className="h-3 w-3" />
@@ -180,7 +177,6 @@ function Projects() {
                     </div>
                   </div>
                   
-                  {/* Progress Bar */}
                   <div className="mt-3">
                     <div className="flex justify-between text-xs text-white/60 mb-1">
                       <span>Progress</span>
@@ -194,7 +190,6 @@ function Projects() {
                     </div>
                   </div>
                   
-                  {/* Cost Variance Indicator */}
                   {costVariance !== 0 && (
                     <div className={`mt-2 text-xs ${costVariance < 0 ? 'text-emerald-300' : 'text-red-300'} flex items-center gap-1`}>
                       {costVariance < 0 ? '↓' : '↑'} R{Math.abs(costVariance).toLocaleString()} 
@@ -202,7 +197,6 @@ function Projects() {
                     </div>
                   )}
 
-                  {/* Daily Log Shortcut Widget */}
                   <div className="mt-3">
                     <DailyLogShortcut projectId={project.id} />
                   </div>
