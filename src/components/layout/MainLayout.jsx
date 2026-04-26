@@ -29,6 +29,9 @@ import {
   Crown
 } from 'lucide-react';
 
+// API Configuration
+const API_URL = 'https://bongankala.pythonanywhere.com';
+
 function MainLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [userRole, setUserRole] = useState('');
@@ -55,7 +58,7 @@ function MainLayout() {
 
       try {
         // Fetch all daily logs to get pending count (status = 'submitted')
-        const logsRes = await fetch(`${API_URL}/api/daily-logs/', {
+        const logsRes = await fetch(`${API_URL}/api/daily-logs/`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         const logsData = await logsRes.json();
@@ -66,7 +69,7 @@ function MainLayout() {
         setPendingCount(pending);
 
         // Fetch projects to get active count
-        const projectsRes = await fetch(`${API_URL}/api/projects/', {
+        const projectsRes = await fetch(`${API_URL}/api/projects/`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         const projectsData = await projectsRes.json();

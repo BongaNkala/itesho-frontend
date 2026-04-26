@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { CheckCircle, XCircle, Clock, ClipboardList, Ruler, AlertCircle } from 'lucide-react';
 
+// API Configuration
+const API_URL = 'https://bongankala.pythonanywhere.com';
+
 function EngineerApprovals() {
   const [submissions, setSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -19,7 +22,7 @@ function EngineerApprovals() {
   const fetchSubmissions = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${API_URL}/api/daily-logs/', {
+      const res = await fetch(`${API_URL}/api/daily-logs/`, {
         headers: { 'Authorization': `Bearer ${getToken()}` },
       });
       const data = await res.json();

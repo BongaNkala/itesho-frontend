@@ -1,3 +1,5 @@
+const API_URL = 'https://bongankala.pythonanywhere.com';
+
 import { useState, useEffect } from 'react';
 import { CheckCircle, XCircle, AlertCircle, Plus, Eye, Calendar, AlertTriangle } from 'lucide-react';
 
@@ -61,7 +63,7 @@ function InspectionManager({ projectId, boqItemId }) {
 
   const submitInspection = async (pointId) => {
     try {
-      const response = await fetch(`${API_URL}/api/inspection-records/', {
+      const response = await fetch(`${API_URL}/api/inspection-records/`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${getToken()}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -249,10 +251,10 @@ function InspectionManager({ projectId, boqItemId }) {
       </div>
 
       {/* Inspection Record Modal */}
-      {showRecordForm && (
+      {showRecordForm && selectedPoint && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h3 className="text-lg font-bold mb-4">Record Inspection: {selectedPoint?.name}</h3>
+            <h3 className="text-lg font-bold mb-4">Record Inspection: {selectedPoint.name}</h3>
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1">Result</label>

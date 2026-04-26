@@ -1,3 +1,5 @@
+const API_URL = 'https://bongankala.pythonanywhere.com';
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Clock, CheckCircle, XCircle, Eye, Sparkles, AlertCircle } from 'lucide-react';
@@ -22,7 +24,7 @@ function SubmissionsPage() {
     }
 
     try {
-      const response = await fetch(`${API_URL}/api/daily-logs/', {
+      const response = await fetch(`${API_URL}/api/daily-logs/`, {
         headers: { 'Authorization': `Bearer ${token}` },
       });
       

@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Clock, CheckCircle, XCircle, Eye, ChevronDown, ChevronUp, AlertCircle, FileText, Calendar, User, MapPin, DollarSign } from 'lucide-react';
 
+// API Configuration
+const API_URL = 'https://bongankala.pythonanywhere.com';
+
 function PendingApprovals() {
   const [pendingLogs, setPendingLogs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,7 +24,6 @@ function PendingApprovals() {
   useEffect(() => {
     fetchUserRole();
     fetchPendingLogs();
-    // Refresh every 30 seconds
     const interval = setInterval(fetchPendingLogs, 30000);
     return () => clearInterval(interval);
   }, []);
@@ -38,13 +40,12 @@ function PendingApprovals() {
 
   const fetchPendingLogs = async () => {
     try {
-      const response = await fetch(`${API_URL}/api/pending-approvals/', {
+      const response = await fetch(`${API_URL}/api/pending-approvals/`, {
         headers: { 'Authorization': `Bearer ${getToken()}` },
       });
       const data = await response.json();
       setPendingLogs(data);
       
-      // Calculate stats
       const currentLevel = data.length > 0 && data[0].current_level_name;
       setStats({
         pending: data.length,
@@ -163,7 +164,6 @@ function PendingApprovals() {
         <p className="text-gray-500">Review and approve daily logs from contractors</p>
       </div>
 
-      {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-white rounded-lg shadow p-4 border-l-4 border-yellow-500">
           <div className="text-sm text-gray-500">Pending for You</div>
@@ -182,7 +182,6 @@ function PendingApprovals() {
         </div>
       </div>
 
-      {/* Pending Approvals List */}
       <div className="space-y-4">
         {pendingLogs.length === 0 ? (
           <div className="bg-white rounded-lg shadow p-12 text-center">
@@ -193,7 +192,6 @@ function PendingApprovals() {
         ) : (
           pendingLogs.map(log => (
             <div key={log.id} className="bg-white rounded-lg shadow overflow-hidden">
-              {/* Header */}
               <div className="p-4 border-b bg-gray-50">
                 <div className="flex justify-between items-start">
                   <div>
@@ -205,10 +203,7 @@ function PendingApprovals() {
                     </div>
                     <p className="text-sm text-gray-600 mt-1">{log.work_description?.substring(0, 100)}</p>
                   </div>
-                  <button
-                    onClick={() => toggleExpand(log.id)}
-                    className="text-gray-500 hover:text-gray-700"
-                  >
+                  <button onClick={() => toggleExpand(log.id)} className="text-gray-500 hover:text-gray-700">
                     {expandedLog === log.id ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
                   </button>
                 </div>
@@ -220,7 +215,6 @@ function PendingApprovals() {
                 </div>
               </div>
 
-              {/* Expanded Details */}
               {expandedLog === log.id && (
                 <div className="p-4 border-b bg-gray-50">
                   <h4 className="font-semibold text-sm mb-3">Approval Chain Status</h4>
@@ -252,7 +246,6 @@ function PendingApprovals() {
                 </div>
               )}
 
-              {/* Action Buttons */}
               <div className="p-4 flex gap-3 border-t">
                 <button
                   onClick={() => {
@@ -291,7 +284,7 @@ function PendingApprovals() {
       {showApproveModal && selectedLog && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h3 className="text-lg font-bold mb-4">Approve Daily Log #{selectedLog.id}</h3>
+            <h3 className="text-lg font-bold mb-4">Approve Daily Log</h3>
             <p className="text-sm text-gray-600 mb-4">Project: {selectedLog.project_name}</p>
             
             <div className="space-y-4">
@@ -347,7 +340,7 @@ function PendingApprovals() {
       {showRejectModal && selectedLog && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h3 className="text-lg font-bold mb-4 text-red-600">Reject Daily Log #{selectedLog.id}</h3>
+            <h3 className="text-lg font-bold mb-4 text-red-600">Reject Daily Log</h3>
             <p className="text-sm text-gray-600 mb-4">Project: {selectedLog.project_name}</p>
             
             <div>

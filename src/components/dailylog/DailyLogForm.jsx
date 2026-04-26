@@ -1,3 +1,5 @@
+const API_URL = 'https://bongankala.pythonanywhere.com';
+
 import { useState, useEffect } from 'react';
 import { Sparkles, Sun, Cloud, CloudRain, Wind, Droplets, Thermometer, Users, Truck, FileText, ClipboardList, AlertCircle, Plus, Trash2, Calendar, Clock, Send } from 'lucide-react';
 
@@ -135,7 +137,7 @@ function DailyLogForm({ projectId, onSuccess }) {
       
       console.log('Submitting payload:', logPayload);
       
-      const logResponse = await fetch(`${API_URL}/api/daily-logs/', {
+      const logResponse = await fetch(`${API_URL}/api/daily-logs/`, {
         method: 'POST',
         headers: { 
           'Authorization': `Bearer ${token}`, 
