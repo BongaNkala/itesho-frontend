@@ -7,7 +7,6 @@ import {
   LogOut,
   Menu,
   X,
-  Users,
   ClipboardList,
   Sparkles,
   Bell,
@@ -15,22 +14,19 @@ import {
   TrendingUp,
   Calendar,
   Activity,
-  HardHat,
   Zap,
   Shield,
   Cloud,
   Sun,
   Moon,
-  Layers,
-  Compass,
   Gauge,
   Target,
   Flame,
-  Crown
+  DollarSign
 } from 'lucide-react';
 
 // API Configuration
-const API_URL = 'https://bongankala.pythonanywhere.com';
+const API_URL = 'http://127.0.0.1:8000';
 
 function MainLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -126,8 +122,9 @@ function MainLayout() {
   const menuItems = [
     { title: 'Dashboard', icon: LayoutDashboard, path: '/dashboard', badge: null, glow: 'from-cyan-500 to-blue-500' },
     { title: 'Projects', icon: Building2, path: '/projects', badge: activeProjectsCount > 0 ? activeProjectsCount : null, glow: 'from-emerald-500 to-teal-500' },
-    // Submissions badge now shows the actual pending count
     { title: 'Submissions', icon: ClipboardList, path: '/submissions', badge: pendingCount > 0 ? pendingCount : null, glow: 'from-orange-500 to-amber-500' },
+    { title: 'Daily Logs', icon: ClipboardList, path: '/daily-logs', badge: null, glow: 'from-blue-500 to-cyan-500' },
+    { title: 'Invoices', icon: DollarSign, path: '/invoices', badge: null, glow: 'from-purple-500 to-pink-500' },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -220,21 +217,21 @@ function MainLayout() {
             {sidebarOpen ? (
               <div className="flex items-center gap-3">
                 <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl blur-xl animate-pulse group-hover:blur-2xl transition-all duration-500"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl blur-xl animate-pulse group-hover:blur-2xl transition-all duration-500" />
                   <div className="relative w-12 h-12 bg-gradient-to-br from-orange-500 to-amber-600 rounded-2xl flex items-center justify-center shadow-2xl transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-3">
-                    <Crown className="h-6 w-6 text-white" />
+                    <Shield className="h-6 w-6 text-white" />
                   </div>
                 </div>
                 <div className="relative">
                   <h1 className="text-2xl font-bold bg-gradient-to-r from-white to-orange-200 bg-clip-text text-transparent tracking-tight">ITesho</h1>
-                  <p className="text-[10px] text-white/40 uppercase tracking-wider font-mono">Construction Suite</p>
+                  <p className="text-[10px] text-white/40 uppercase tracking-wider font-medium">Project Control</p>
                 </div>
               </div>
             ) : (
               <div className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl blur-xl animate-pulse"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl blur-xl animate-pulse" />
                 <div className="relative w-12 h-12 bg-gradient-to-br from-orange-500 to-amber-600 rounded-2xl flex items-center justify-center shadow-2xl">
-                  <Crown className="h-6 w-6 text-white" />
+                  <Shield className="h-6 w-6 text-white" />
                 </div>
               </div>
             )}
@@ -265,14 +262,14 @@ function MainLayout() {
                 {/* Animated Active Border */}
                 {isActive(item.path) && (
                   <>
-                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-orange-400 via-amber-500 to-orange-400 rounded-r-full animate-pulse"></div>
-                    <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-transparent animate-pulse"></div>
+                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-orange-400 via-amber-500 to-orange-400 rounded-r-full animate-pulse" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-transparent animate-pulse" />
                   </>
                 )}
                 
                 {/* Icon with 3D Hover */}
                 <div className="relative">
-                  <div className={`absolute inset-0 bg-gradient-to-r ${item.glow} rounded-xl blur-md transition-all duration-500 ${hoveredItem === idx ? 'opacity-100 scale-150' : 'opacity-0'}`}></div>
+                  <div className={`absolute inset-0 bg-gradient-to-r ${item.glow} rounded-xl blur-md transition-all duration-500 ${hoveredItem === idx ? 'opacity-100 scale-150' : 'opacity-0'}`} />
                   <item.icon className={`relative h-5 w-5 transition-all duration-500 ${
                     isActive(item.path) ? 'text-orange-300' : 'text-white/60 group-hover:text-white group-hover:scale-125'
                   }`} />
@@ -309,7 +306,7 @@ function MainLayout() {
             <div className={`backdrop-blur-xl bg-gradient-to-br from-white/5 to-white/0 rounded-xl p-3 transition-all duration-500 hover:bg-white/10 ${sidebarOpen ? '' : 'text-center'}`}>
               <div className={`flex ${sidebarOpen ? 'gap-3' : 'flex-col items-center'} items-center`}>
                 <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-amber-500 rounded-full blur-md animate-pulse"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-amber-500 rounded-full blur-md animate-pulse" />
                   <div className="relative w-12 h-12 bg-gradient-to-br from-orange-500 to-amber-600 rounded-full flex items-center justify-center shadow-2xl transform transition-all duration-500 group-hover:scale-110">
                     <span className="text-white font-bold text-lg tracking-wider">
                       {userRole ? userRole.charAt(0).toUpperCase() : 'C'}
@@ -321,7 +318,7 @@ function MainLayout() {
                     <p className="text-white text-sm font-semibold capitalize tracking-wide">{userRole || 'Contractor'}</p>
                     <div className="flex items-center gap-1 mt-1">
                       <Shield className="h-3 w-3 text-emerald-400" />
-                      <p className="text-[9px] text-white/40 uppercase tracking-wider">Verified Access</p>
+                      <p className="text-[9px] text-white/40 uppercase tracking-wider">Project Control</p>
                     </div>
                   </div>
                 )}
@@ -333,7 +330,7 @@ function MainLayout() {
               onClick={handleLogout}
               className="group relative flex items-center gap-3 px-4 py-3 mt-2 w-full rounded-xl text-white/60 hover:text-white hover:bg-red-500/20 transition-all duration-500 overflow-hidden"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-red-500/0 to-red-500/0 group-hover:from-red-500/10 group-hover:to-transparent transition-all duration-700"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-red-500/0 to-red-500/0 group-hover:from-red-500/10 group-hover:to-transparent transition-all duration-700" />
               <LogOut className="h-5 w-5 relative z-10 transition-all duration-500 group-hover:scale-110 group-hover:-translate-x-1 group-hover:text-red-400" />
               {sidebarOpen && (
                 <span className="relative z-10 text-sm font-medium tracking-wide transition-all duration-300 group-hover:translate-x-1">
@@ -356,7 +353,7 @@ function MainLayout() {
                 onClick={() => setSidebarOpen(true)}
                 className="relative p-2 rounded-xl text-white/70 hover:text-white hover:bg-white/10 transition-all duration-500 group overflow-hidden"
               >
-                <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-all duration-500"></div>
+                <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-all duration-500" />
                 <Menu className="h-5 w-5 relative z-10 transition-transform duration-500 group-hover:scale-110" />
               </button>
             )}
@@ -367,7 +364,7 @@ function MainLayout() {
               <div className="hidden md:flex items-center gap-3 px-4 py-2 bg-white/5 rounded-full backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all duration-300 cursor-default">
                 <div className="relative">
                   <Zap className="h-3.5 w-3.5 text-yellow-400 animate-pulse" />
-                  <div className="absolute inset-0 bg-yellow-400/20 rounded-full blur-md animate-pulse"></div>
+                  <div className="absolute inset-0 bg-yellow-400/20 rounded-full blur-md animate-pulse" />
                 </div>
                 <span className="text-xs text-white/70">Good {getGreeting()},</span>
                 <span className="text-xs text-white font-semibold capitalize">{userRole || 'User'}</span>
@@ -378,7 +375,7 @@ function MainLayout() {
                 <Calendar className="h-3.5 w-3.5 text-white/50" />
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-white/70">{formatDate().split(',')[0]}</span>
-                  <div className="w-px h-3 bg-white/20"></div>
+                  <div className="w-px h-3 bg-white/20" />
                   <span className="text-xs text-white/80 font-semibold">{formatTime()}</span>
                 </div>
               </div>
@@ -390,8 +387,8 @@ function MainLayout() {
                   className="relative p-2 rounded-xl text-white/70 hover:text-white hover:bg-white/10 transition-all duration-500 group"
                 >
                   <Bell className="h-5 w-5 transition-transform duration-500 group-hover:scale-110" />
-                  <span className="absolute top-1 right-1 w-2 h-2 bg-gradient-to-r from-orange-500 to-red-500 rounded-full animate-ping"></span>
-                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                  <span className="absolute top-1 right-1 w-2 h-2 bg-gradient-to-r from-orange-500 to-red-500 rounded-full animate-ping" />
+                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
                 </button>
                 
                 {/* Notification Dropdown */}
@@ -402,10 +399,10 @@ function MainLayout() {
                       <p className="text-[10px] text-white/40">You have 3 unread messages</p>
                     </div>
                     <div className="divide-y divide-white/10 max-h-96 overflow-auto">
-                      {[1,2,3].map(i => (
+                      {[1, 2, 3].map((i) => (
                         <div key={i} className="p-3 hover:bg-white/5 transition-all duration-300 cursor-pointer group">
                           <div className="flex items-start gap-3">
-                            <div className="w-2 h-2 mt-2 bg-orange-500 rounded-full animate-pulse"></div>
+                            <div className="w-2 h-2 mt-2 bg-orange-500 rounded-full animate-pulse" />
                             <div className="flex-1">
                               <p className="text-white text-xs font-medium">New submission from contractor</p>
                               <p className="text-[10px] text-white/40 mt-1">requires your review</p>
@@ -432,7 +429,7 @@ function MainLayout() {
           {/* Advanced Stats Bar - Animated Metrics */}
           <div className="px-8 py-2 border-t border-white/5 hidden lg:flex items-center gap-6 overflow-x-auto scrollbar-hide">
             <div className="flex items-center gap-2 px-3 py-1 bg-white/5 rounded-full">
-              <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></div>
+              <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
               <span className="text-[10px] text-white/60 uppercase tracking-wider">System Operational</span>
             </div>
             <div className="flex items-center gap-2">
@@ -447,13 +444,13 @@ function MainLayout() {
               <Flame className="h-3 w-3 text-red-400 animate-pulse" />
               <span className="text-[10px] text-white/60">Pending: {pendingCount}</span>
             </div>
-            <div className="flex-1"></div>
+            <div className="flex-1" />
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-1">
                 <Cloud className="h-3 w-3 text-white/40" />
                 <span className="text-[10px] text-white/40">Cloud Sync</span>
                 <div className="w-12 h-1 bg-white/10 rounded-full overflow-hidden">
-                  <div className="h-full w-full bg-gradient-to-r from-orange-500 to-amber-500 rounded-full animate-pulse"></div>
+                  <div className="h-full w-full bg-gradient-to-r from-orange-500 to-amber-500 rounded-full animate-pulse" />
                 </div>
               </div>
             </div>
@@ -473,7 +470,7 @@ function MainLayout() {
         {/* Elegant Footer */}
         <footer className="px-8 py-3 border-t border-white/5 text-center">
           <p className="text-[10px] text-white/30 tracking-wider">
-            ITesho Construction Suite v3.0 | Enterprise Grade Security | Real-time Sync Active
+            ITesho | Project Control | Enterprise Grade Security
           </p>
         </footer>
       </div>

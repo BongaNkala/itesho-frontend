@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Clock, CheckCircle, XCircle, Eye, ChevronDown, ChevronUp, AlertCircle, FileText, Calendar, User, MapPin, DollarSign } from 'lucide-react';
 
 // API Configuration
-const API_URL = 'https://bongankala.pythonanywhere.com';
+const API_URL = 'http://127.0.0.1:8000';
 
 function PendingApprovals() {
   const [pendingLogs, setPendingLogs] = useState([]);

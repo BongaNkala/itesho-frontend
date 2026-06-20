@@ -1,12 +1,17 @@
-const API_URL = 'https://bongankala.pythonanywhere.com';
+const API_URL = 'http://127.0.0.1:8000';
 
 import { useState, useEffect } from 'react';
+import ComplianceGatekeeper from '../components/compliance/ComplianceGatekeeper';
 
 function DailyLogForm({ projectId, onSuccess }) {
   const [boqItems, setBoqItems] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [error, setError] = useState(null);
+  const [showCompliance, setShowCompliance] = useState(true); // Start with compliance check
+  const [projectName, setProjectName] = useState('');
+  const [compliancePassed, setCompliancePassed] = useState(false);
+  const [checkingCompliance, setCheckingCompliance] = useState(true);
 
   const [weather, setWeather] = useState({
     condition: 'sunny',
@@ -40,9 +45,32 @@ function DailyLogForm({ projectId, onSuccess }) {
 
   const getToken = () => localStorage.getItem('access_token');
 
+  // Fetch project name on mount
   useEffect(() => {
-    fetchBOQItems();
+    const fetchProject = async () => {
+      try {
+        const token = getToken();
+        const response = await fetch(`${API_URL}/api/projects/${projectId}/`, {
+          headers: { 'Authorization': `Bearer ${token}` },
+        });
+        const data = await response.json();
+        setProjectName(data.name || 'Project');
+      } catch (err) {
+        console.error('Failed to fetch project:', err);
+        setProjectName('Project');
+      } finally {
+        setCheckingCompliance(false);
+      }
+    };
+    fetchProject();
   }, [projectId]);
+
+  // Only fetch BOQ items after compliance is passed
+  useEffect(() => {
+    if (compliancePassed) {
+      fetchBOQItems();
+    }
+  }, [compliancePassed]);
 
   const fetchBOQItems = async () => {
     try {
@@ -233,6 +261,48 @@ function DailyLogForm({ projectId, onSuccess }) {
     }
   };
 
+  // Show loading while checking compliance
+  if (checkingCompliance) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-orange-500 mx-auto"></div>
+        <p className="mt-3 text-gray-500">Checking compliance...</p>
+      </div>
+    );
+  }
+
+  // Show Compliance Gatekeeper if compliance check is required
+  if (showCompliance && !compliancePassed) {
+    return (
+      <div className="relative min-h-[500px]">
+        <button
+          onClick={() => {
+            // If user cancels, go back or close
+            window.history.back();
+          }}
+          className="mb-4 inline-flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:text-gray-800 bg-gray-100 rounded-lg hover:bg-gray-200 transition-all duration-300"
+        >
+          ← Back
+        </button>
+        <ComplianceGatekeeper
+          projectId={projectId}
+          projectName={projectName}
+          returnPath="daily-log"
+          onAccessGranted={() => {
+            console.log('✅ Compliance granted for Daily Log!');
+            setCompliancePassed(true);
+            setShowCompliance(false);
+          }}
+          onCancel={() => {
+            console.log('❌ Compliance check cancelled');
+            window.history.back();
+          }}
+        />
+      </div>
+    );
+  }
+
+  // Main form - only shown after compliance is passed
   return (
     <div className="space-y-6 bg-white min-h-screen">
       {/* Header */}

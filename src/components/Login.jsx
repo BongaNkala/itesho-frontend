@@ -1,8 +1,25 @@
 import { useState } from 'react';
-import { Building2, Lock, Mail, Sparkles, CheckCircle2, TrendingUp, Shield, Users, Clock, Award, Target, Globe, Zap, Rocket, Star, Compass } from 'lucide-react';
+import { 
+  Building2, 
+  Lock, 
+  Mail, 
+  Sparkles, 
+  CheckCircle2, 
+  TrendingUp, 
+  Shield, 
+  Users, 
+  Clock, 
+  Award, 
+  Target, 
+  Globe, 
+  Zap, 
+  Rocket, 
+  Star, 
+  Compass 
+} from 'lucide-react';
 
 // API Configuration
-const API_URL = import.meta.env.VITE_API_URL || 'https://bongankala.pythonanywhere.com';
+const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
 
 function Login() {
   const [username, setUsername] = useState('');
@@ -26,7 +43,9 @@ function Login() {
         localStorage.setItem('access_token', data.access);
         localStorage.setItem('refresh_token', data.refresh);
         setMessage('Success! Redirecting...');
-        setTimeout(() => { window.location.href = '/dashboard'; }, 1000);
+        setTimeout(() => { 
+          window.location.href = '/dashboard'; 
+        }, 1000);
       } else {
         setMessage('Login failed: ' + (data.detail || 'Wrong credentials'));
         setIsLoading(false);
@@ -63,7 +82,7 @@ function Login() {
       }}
     >
       {/* Gradient Overlay for depth */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/20 pointer-events-none"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/20 pointer-events-none" />
       
       {/* Ultra-Compact Portable Login Form - Left Side */}
       <div className="relative z-10 w-[340px] flex items-center justify-center p-4">
@@ -106,7 +125,7 @@ function Login() {
               >
                 {isLoading ? (
                   <span className="flex items-center justify-center gap-1.5">
-                    <div className="animate-spin rounded-full h-3 w-3 border-2 border-white border-t-transparent"></div>
+                    <div className="animate-spin rounded-full h-3 w-3 border-2 border-white border-t-transparent" />
                     Signing...
                   </span>
                 ) : (
@@ -135,7 +154,7 @@ function Login() {
       </div>
 
       {/* Spacer to expose centre image */}
-      <div className="flex-1"></div>
+      <div className="flex-1" />
 
       {/* Rich Creative Content - Far Right */}
       <div className="hidden lg:flex w-[380px] items-center justify-end pr-8 xl:pr-12 relative z-10">
@@ -147,13 +166,15 @@ function Login() {
               <Sparkles className="h-3 w-3 text-orange-400" />
             </div>
             <h1 className="text-3xl font-bold text-white leading-tight drop-shadow-lg">
-              Build Smarter.
+              Project
               <br />
-              <span className="bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">Manage Better.</span>
+              <span className="bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">Control</span>
+              <br />
+              Simplified
             </h1>
-            <div className="h-px w-16 bg-gradient-to-r from-orange-400 to-transparent ml-auto my-4"></div>
+            <div className="h-px w-16 bg-gradient-to-r from-orange-400 to-transparent ml-auto my-4" />
             <p className="text-xs text-white/60 leading-relaxed">
-              The complete construction management platform for modern contractors and project teams.
+              Complete platform for project management, compliance tracking, and stakeholder collaboration.
             </p>
           </div>
 
@@ -162,7 +183,9 @@ function Login() {
             {features.map((feature, idx) => (
               <div key={idx} className="group text-right">
                 <div className="flex items-center justify-end gap-2">
-                  <span className="text-[10px] text-white/70 group-hover:text-white/90 transition-colors">{feature.text}</span>
+                  <span className="text-[10px] text-white/70 group-hover:text-white/90 transition-colors">
+                    {feature.text}
+                  </span>
                   <div className="p-1 rounded-md bg-orange-500/15 group-hover:bg-orange-500/25 transition-all group-hover:scale-105">
                     <feature.icon className="h-2.5 w-2.5 text-orange-300" />
                   </div>
@@ -185,7 +208,7 @@ function Login() {
           {/* Trust Badges */}
           <div className="flex items-center justify-end gap-4 pt-3 border-t border-white/10">
             <div className="flex items-center gap-1.5">
-              <div className="w-1 h-1 bg-emerald-400 rounded-full animate-pulse"></div>
+              <div className="w-1 h-1 bg-emerald-400 rounded-full animate-pulse" />
               <span className="text-[8px] text-white/40">99.9% Uptime</span>
             </div>
             <div className="flex items-center gap-1.5">
@@ -198,12 +221,11 @@ function Login() {
             </div>
           </div>
 
-          {/* Quote */}
+          {/* Footer */}
           <div className="mt-5 pt-3 border-t border-white/10 text-right">
-            <p className="text-[9px] text-white/40 italic">
-              "The best decision for our project management workflow"
+            <p className="text-[8px] text-white/30">
+              ITesho | Project Control
             </p>
-            <p className="text-[8px] text-white/30 mt-1">— Construction Industry Weekly</p>
           </div>
         </div>
       </div>

@@ -9,10 +9,12 @@ import PendingApprovals from './pages/PendingApprovals';
 import EngineerApprovals from './pages/EngineerApprovals';
 import ConsultantApprovals from './pages/ConsultantApprovals';
 import MunicipalApprovals from './pages/MunicipalApprovals';
+import Invoices from './pages/Invoices';
+import DailySiteLogs from './pages/DailySiteLogs';
 
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem('access_token');
-  if (!token) return <Navigate to="/" replace />;
+  if (!token) return <Navigate to="/login" replace />;
   return children;
 }
 
@@ -20,6 +22,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Login route - both / and /login work */}
+        <Route path="/login" element={<Login />} />
         <Route path="/" element={<Login />} />
         
         <Route path="/dashboard" element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
@@ -38,21 +42,29 @@ function App() {
           <Route index element={<SubmissionsPage />} />
         </Route>
         
+        <Route path="/invoices" element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
+          <Route index element={<Invoices />} />
+        </Route>
+
+        <Route path="/daily-logs" element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
+          <Route index element={<DailySiteLogs />} />
+        </Route>
+        
         <Route path="/approvals" element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
           <Route index element={<PendingApprovals />} />
         </Route>
-
-        // Add these routes
+        
         <Route path="/approvals/engineer" element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
           <Route index element={<EngineerApprovals />} />
         </Route>
+        
         <Route path="/approvals/consultant" element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
           <Route index element={<ConsultantApprovals />} />
         </Route>
+        
         <Route path="/approvals/municipal" element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
           <Route index element={<MunicipalApprovals />} />
         </Route>
-        
       </Routes>
     </BrowserRouter>
   );

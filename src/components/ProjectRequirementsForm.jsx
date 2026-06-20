@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
-import { X, Upload, File, Loader2, CheckCircle, Clock, AlertCircle } from 'lucide-react';
+import { X, Upload, File, Loader2, CheckCircle, Clock, AlertCircle, Shield, ArrowLeft } from 'lucide-react';
+import ComplianceGatekeeper from '../components/compliance/ComplianceGatekeeper';
+
+const API_URL = 'http://127.0.0.1:8000';
 
 function ProjectRequirementsForm({ isOpen, onClose, projectId, onSuccess }) {
   const [activeSection, setActiveSection] = useState(1);
@@ -8,6 +11,12 @@ function ProjectRequirementsForm({ isOpen, onClose, projectId, onSuccess }) {
   const [documents, setDocuments] = useState({});
   const [uploadStatus, setUploadStatus] = useState({});
   const [categories, setCategories] = useState([]);
+  const [projectName, setProjectName] = useState('');
+  
+  // Compliance Gatekeeper state
+  const [showCompliance, setShowCompliance] = useState(false);
+  const [accessGranted, setAccessGranted] = useState(false);
+  const [complianceChecked, setComplianceChecked] = useState(false);
 
   const getToken = () => localStorage.getItem('access_token');
 
@@ -25,14 +34,33 @@ function ProjectRequirementsForm({ isOpen, onClose, projectId, onSuccess }) {
 
   useEffect(() => {
     if (isOpen && projectId) {
+      fetchProjectName();
       fetchCategories();
       fetchDocuments();
+      // Reset compliance state when modal opens
+      setComplianceChecked(false);
+      setAccessGranted(false);
+      setShowCompliance(false);
     }
   }, [isOpen, projectId]);
 
+  const fetchProjectName = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/projects/${projectId}/`, {
+        headers: { 'Authorization': `Bearer ${getToken()}` },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setProjectName(data.name || 'Project');
+      }
+    } catch (err) {
+      console.error('Failed to fetch project name:', err);
+    }
+  };
+
   const fetchCategories = async () => {
     try {
-      const response = await fetch(`${API_URL}/api/categories/', {
+      const response = await fetch(`${API_URL}/api/categories/`, {
         headers: { 'Authorization': `Bearer ${getToken()}` },
       });
       const data = await response.json();
@@ -122,7 +150,7 @@ function ProjectRequirementsForm({ isOpen, onClose, projectId, onSuccess }) {
     formData.append('version', '1.0');
 
     try {
-      const response = await fetch(`${API_URL}/api/documents/', {
+      const response = await fetch(`${API_URL}/api/documents/`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${getToken()}` },
         body: formData,
@@ -192,6 +220,102 @@ function ProjectRequirementsForm({ isOpen, onClose, projectId, onSuccess }) {
     }
   };
 
+  // Handle opening the form - check compliance first
+  const handleOpenForm = () => {
+    if (!complianceChecked) {
+      setShowCompliance(true);
+    } else {
+      // Already passed compliance
+    }
+  };
+
+  // Handle access granted from Compliance Gatekeeper
+  const handleAccessGranted = () => {
+    setShowCompliance(false);
+    setAccessGranted(true);
+    setComplianceChecked(true);
+  };
+
+  // Handle cancel from Compliance Gatekeeper
+  const handleCancelCompliance = () => {
+    setShowCompliance(false);
+    onClose(); // Close the form entirely
+  };
+
+  // If compliance gatekeeper is showing, render it
+  if (showCompliance && projectId) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+        <div className="bg-white rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col p-6">
+          <button
+            onClick={handleCancelCompliance}
+            className="self-start mb-4 inline-flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:text-gray-800 bg-gray-100 rounded-lg hover:bg-gray-200 transition"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back
+          </button>
+          <ComplianceGatekeeper
+            projectId={projectId}
+            projectName={projectName || 'Project'}
+            onAccessGranted={handleAccessGranted}
+            onCancel={handleCancelCompliance}
+            returnPath="project-requirements"
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // If compliance not yet checked, show a compliance check screen
+  if (!complianceChecked && !showCompliance) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+        <div className="bg-white rounded-xl w-full max-w-md p-8 text-center">
+          <Shield className="h-16 w-16 text-orange-500 mx-auto mb-4" />
+          <h2 className="text-xl font-bold text-gray-800 mb-2">Compliance Check Required</h2>
+          <p className="text-gray-500 text-sm mb-6">
+            You need to pass the compliance gatekeeper before accessing project requirements.
+          </p>
+          <button
+            onClick={handleOpenForm}
+            className="px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition flex items-center gap-2 mx-auto"
+          >
+            <Shield className="h-4 w-4" />
+            Verify Compliance
+          </button>
+          <button
+            onClick={onClose}
+            className="block mt-3 text-sm text-gray-400 hover:text-gray-600 transition"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // If access not granted yet, show message
+  if (!accessGranted) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+        <div className="bg-white rounded-xl w-full max-w-md p-8 text-center">
+          <Shield className="h-16 w-16 text-red-400 mx-auto mb-4" />
+          <h2 className="text-xl font-bold text-gray-800 mb-2">Access Denied</h2>
+          <p className="text-gray-500 text-sm mb-6">
+            You don't have access to this project's requirements.
+          </p>
+          <button
+            onClick={onClose}
+            className="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Main form - only shown when compliance is passed
   const sections = [
     { id: 1, title: 'Project Details', icon: '📋', 
       docTypes: ['contract', 'project_brief', 'budget'] },
@@ -238,7 +362,7 @@ function ProjectRequirementsForm({ isOpen, onClose, projectId, onSuccess }) {
             <div key={docType} className="border rounded-lg p-3 bg-white">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm font-medium capitalize">{docType.replace('_', ' ')}</span>
-                <label className="cursor-pointer bg-orange-500 text-white px-3 py-1 rounded text-xs hover:bg-orange-600">
+                <label className="cursor-pointer bg-orange-500 text-white px-3 py-1 rounded text-xs hover:bg-orange-600 transition">
                   <Upload className="h-3 w-3 inline mr-1" />
                   Upload
                   <input
@@ -296,7 +420,13 @@ function ProjectRequirementsForm({ isOpen, onClose, projectId, onSuccess }) {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="bg-white rounded-lg w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col">
         <div className="flex justify-between items-center p-6 border-b">
-          <h2 className="text-xl font-bold">Project Requirements & Document Control</h2>
+          <div className="flex items-center gap-3">
+            <h2 className="text-xl font-bold">Project Requirements & Document Control</h2>
+            <div className="flex items-center gap-1 px-2 py-0.5 bg-green-100 rounded-full text-xs text-green-700">
+              <CheckCircle className="h-3 w-3" />
+              Compliance Verified
+            </div>
+          </div>
           <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded"><X className="h-5 w-5" /></button>
         </div>
 

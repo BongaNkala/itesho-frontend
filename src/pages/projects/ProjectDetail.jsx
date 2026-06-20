@@ -1,4 +1,4 @@
-const API_URL = 'https://bongankala.pythonanywhere.com';
+const API_URL = 'http://127.0.0.1:8000';
 
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -20,6 +20,7 @@ function ProjectDetail() {
   const [authError, setAuthError] = useState(false);
   const [boqItems, setBoqItems] = useState([]);
   const [showLogForm, setShowLogForm] = useState(false);
+  const [refreshBOQ, setRefreshBOQ] = useState(0);
 
   const getToken = () => localStorage.getItem('access_token');
 
@@ -232,7 +233,7 @@ function ProjectDetail() {
         </TabsList>
 
         <TabsContent value="boq" className="bg-white rounded-xl border border-gray-100 p-6">
-          <BOQManager projectId={id} />
+          <BOQManager projectId={id} refreshTrigger={refreshBOQ} />
         </TabsContent>
         
         <TabsContent value="daily-logs" className="bg-white rounded-xl border border-gray-100 p-6">
@@ -244,7 +245,10 @@ function ProjectDetail() {
               >
                 ← Back to Logs
               </button>
-              <DailyLogForm projectId={id} onSuccess={() => setShowLogForm(false)} />
+              <DailyLogForm projectId={id} onSuccess={() => {
+                setShowLogForm(false);
+                setRefreshBOQ(prev => prev + 1);
+              }} />
             </div>
           ) : (
             <LogsDashboard projectId={id} onNewEntry={() => setShowLogForm(true)} />

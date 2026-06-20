@@ -1,0 +1,2 @@
+import Invoices from './pages/Invoices';
+import DailySiteLogs from './pages/DailySiteLogs';

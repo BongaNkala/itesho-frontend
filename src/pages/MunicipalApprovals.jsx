@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { CheckCircle, XCircle, Clock, FileText, Stamp, Award, AlertCircle } from 'lucide-react';
 
 // API Configuration
-const API_URL = 'https://bongankala.pythonanywhere.com';
+const API_URL = 'http://127.0.0.1:8000';
 
 function MunicipalApprovals() {
   const [submissions, setSubmissions] = useState([]);

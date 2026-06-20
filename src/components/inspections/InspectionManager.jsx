@@ -1,4 +1,4 @@
-const API_URL = 'https://bongankala.pythonanywhere.com';
+const API_URL = 'http://127.0.0.1:8000';
 
 import { useState, useEffect } from 'react';
 import { CheckCircle, XCircle, AlertCircle, Plus, Eye, Calendar, AlertTriangle } from 'lucide-react';
