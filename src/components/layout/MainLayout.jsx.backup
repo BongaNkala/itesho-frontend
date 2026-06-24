@@ -22,8 +22,7 @@ import {
   Gauge,
   Target,
   Flame,
-  DollarSign,
-  Settings  // <-- ADD THIS
+  DollarSign
 } from 'lucide-react';
 
 // API Configuration
@@ -126,7 +125,6 @@ function MainLayout() {
     { title: 'Submissions', icon: ClipboardList, path: '/submissions', badge: pendingCount > 0 ? pendingCount : null, glow: 'from-orange-500 to-amber-500' },
     { title: 'Daily Logs', icon: ClipboardList, path: '/daily-logs', badge: null, glow: 'from-blue-500 to-cyan-500' },
     { title: 'Invoices', icon: DollarSign, path: '/invoices', badge: null, glow: 'from-purple-500 to-pink-500' },
-  { title: 'Reports', icon: Settings, path: '/reports', badge: null, glow: 'from-violet-500 to-purple-500' },
   ];
 
   const isActive = (path) => location.pathname === path;

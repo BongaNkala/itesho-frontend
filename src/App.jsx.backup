@@ -11,7 +11,7 @@ import ConsultantApprovals from './pages/ConsultantApprovals';
 import MunicipalApprovals from './pages/MunicipalApprovals';
 import Invoices from './pages/Invoices';
 import DailySiteLogs from './pages/DailySiteLogs';
-import Reports from './pages/Reports';
+import AdvancedSettings from './pages/AdvancedSettings';
 
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem('access_token');
@@ -65,14 +65,6 @@ function App() {
         
         <Route path="/approvals/municipal" element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
           <Route index element={<MunicipalApprovals />} />
-        </Route>
-
-        {/* Redirect old URL to new */}
-        <Route path="/advanced-settings" element={<Navigate to="/reports" replace />} />
-
-        {/* Reports Route */}
-        <Route path="/reports" element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
-          <Route index element={<Reports />} />
         </Route>
       </Routes>
     </BrowserRouter>
