@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import ComplianceGatekeeper from '../components/compliance/ComplianceGatekeeper';
 
-const API_URL = 'http://127.0.0.1:8000';
+const API_URL = import.meta.env.VITE_API_URL || 'https://bongankala.pythonanywhere.com';
 const WEATHER_API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY || '886336475379f4ee302c0179d9be24ec';
 
 function DailySiteLogs() {
