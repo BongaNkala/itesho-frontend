@@ -1,6 +1,6 @@
 // src/pages/Projects.jsx
 
-const API_URL = 'http://127.0.0.1:8000';
+const API_URL = import.meta.env.VITE_API_URL || 'https://bongankala.pythonanywhere.com';
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
