@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 
 // ─── API Helper ──────────────────────────────────────────────────────────────
-const API_URL = 'http://127.0.0.1:8000';
+const API_URL = import.meta.env.VITE_API_URL || 'https://bongankala.pythonanywhere.com';
 
 const apiFetch = async (endpoint) => {
   const token = localStorage.getItem('access_token');
