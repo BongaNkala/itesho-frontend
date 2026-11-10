@@ -39,7 +39,6 @@ function Dashboard() {
   const [pendingNavigation, setPendingNavigation] = useState(null);
 
   const navigate = useNavigate();
-
   const getToken = () => localStorage.getItem('access_token');
 
   const formatCurrency = (amount) => {
@@ -70,13 +69,13 @@ function Dashboard() {
 
     try {
       const [projectsRes, logsRes, invoicesRes] = await Promise.all([
-        fetch('http://127.0.0.1:8000/api/projects/', {
+        fetch('https://bongankala.pythonanywhere.com/api/projects/', {
           headers: { Authorization: `Bearer ${token}` }
         }),
-        fetch('http://127.0.0.1:8000/api/daily-logs/', {
+        fetch('https://bongankala.pythonanywhere.com/api/daily-logs/', {
           headers: { Authorization: `Bearer ${token}` }
         }),
-        fetch('http://127.0.0.1:8000/api/invoices/', {
+        fetch('https://bongankala.pythonanywhere.com/api/invoices/', {
           headers: { Authorization: `Bearer ${token}` }
         })
       ]);
@@ -151,6 +150,25 @@ function Dashboard() {
 
   const handleProjectSelect = (projectId, projectName) => {
     console.log('🖱️ Dashboard - Project clicked:', projectName, '(ID:', projectId, ')');
+    
+    // Check if the user is the Project Manager
+    const token = localStorage.getItem('access_token');
+    let currentUserId = null;
+    if (token) {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      currentUserId = payload.user_id;
+    }
+    
+    const project = projects.find(p => p.id === projectId);
+
+    // If they are the PM, skip the gatekeeper entirely
+    if (project && project.project_manager === currentUserId) {
+      console.log('✅ User is the PM, bypassing compliance gatekeeper.');
+      navigate(`/projects/${projectId}`);
+      return;
+    }
+
+    // Otherwise, show the gatekeeper
     setSelectedProjectId(projectId);
     setSelectedProjectName(projectName);
     setShowCompliance(true);
@@ -248,7 +266,6 @@ function Dashboard() {
 
       {/* Stats Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-        {/* Total Projects Card */}
         <div
           onClick={() => navigate('/projects')}
           className="group backdrop-blur-md bg-white/20 rounded-xl p-4 border border-white/20 shadow-lg cursor-pointer transition-all duration-300 hover:scale-105 hover:bg-white/30 hover:shadow-2xl"
@@ -265,7 +282,6 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* Overall Progress Card */}
         <div className="group backdrop-blur-md bg-white/20 rounded-xl p-4 border border-white/20 shadow-lg transition-all duration-300 hover:scale-105 hover:bg-white/30 hover:shadow-2xl">
           <div className="flex justify-between items-start">
             <span className="text-sm text-white/80 drop-shadow">Overall Progress</span>
@@ -282,7 +298,6 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* Total Budget Card */}
         <div className="group backdrop-blur-md bg-white/20 rounded-xl p-4 border border-white/20 shadow-lg transition-all duration-300 hover:scale-105 hover:bg-white/30 hover:shadow-2xl">
           <div className="flex justify-between items-start">
             <span className="text-sm text-white/80 drop-shadow">Total Budget</span>
@@ -296,7 +311,6 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* Pending Approvals Card */}
         <div
           onClick={() => navigate('/submissions')}
           className="group backdrop-blur-md bg-white/20 rounded-xl p-4 border border-white/20 shadow-lg cursor-pointer transition-all duration-300 hover:scale-105 hover:bg-white/30 hover:shadow-2xl"
@@ -321,7 +335,6 @@ function Dashboard() {
           <div className="text-xs text-white/60 mt-1 drop-shadow">Awaiting review</div>
         </div>
 
-        {/* Pending Invoices Card */}
         <div
           onClick={() => navigate('/invoices')}
           className="group backdrop-blur-md bg-white/20 rounded-xl p-4 border border-white/20 shadow-lg cursor-pointer transition-all duration-300 hover:scale-105 hover:bg-white/30 hover:shadow-2xl"
@@ -349,7 +362,6 @@ function Dashboard() {
 
       {/* Two Cards Side by Side */}
       <div className="grid gap-6 md:grid-cols-2">
-        {/* Recent Projects Card */}
         <div className="backdrop-blur-md bg-white/20 rounded-xl border border-white/20 shadow-xl transition-all duration-300 hover:shadow-2xl hover:bg-white/25 overflow-hidden">
           <div className="p-4 border-b border-white/10">
             <div className="flex items-center gap-2">
@@ -368,7 +380,6 @@ function Dashboard() {
                   className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/10 transition-all duration-300 hover:bg-white/20 hover:scale-[1.02] cursor-pointer relative"
                   onClick={() => handleProjectSelect(project.id, project.name)}
                 >
-                  {/* Compliance Badge */}
                   <div className="absolute top-2 right-2 z-10">
                     <div className="flex items-center gap-1 px-1.5 py-0.5 bg-orange-500/30 backdrop-blur-sm rounded-full text-[8px] text-white/80 border border-orange-400/30">
                       <Shield className="h-2 w-2" />
@@ -403,7 +414,6 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* Daily Log Shortcut Info */}
         <div className="backdrop-blur-md bg-white/20 rounded-xl border border-white/20 shadow-xl transition-all duration-300 hover:shadow-2xl hover:bg-white/25 overflow-hidden">
           <div className="p-4 border-b border-white/10">
             <div className="flex items-center gap-2">
@@ -435,7 +445,6 @@ function Dashboard() {
 
       {/* Two Submission Widgets */}
       <div className="grid gap-6 md:grid-cols-2">
-        {/* Pending Submissions Widget */}
         <div className="backdrop-blur-md bg-white/20 rounded-xl border border-white/20 shadow-xl transition-all duration-300 hover:shadow-2xl hover:bg-white/25 overflow-hidden">
           <div className="p-4 border-b border-white/10">
             <div className="flex justify-between items-center">
@@ -493,7 +502,6 @@ function Dashboard() {
           )}
         </div>
 
-        {/* Approved Submissions Widget */}
         <div className="backdrop-blur-md bg-white/20 rounded-xl border border-white/20 shadow-xl transition-all duration-300 hover:shadow-2xl hover:bg-white/25 overflow-hidden">
           <div className="p-4 border-b border-white/10">
             <div className="flex justify-between items-center">
