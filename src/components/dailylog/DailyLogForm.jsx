@@ -1,8 +1,8 @@
 const API_URL = import.meta.env.VITE_API_URL || 'https://bongankala.pythonanywhere.com';
 const WEATHER_API_KEY = '886336475379f4ee302c0179d9be24ec';
 
-import { useState, useEffect } from 'react';
-import { 
+import { Shield, CheckCircle, Clock, Camera, useState, useEffect } from 'react';
+import { Shield, CheckCircle, Clock, Camera, 
   Sparkles, Sun, Cloud, CloudRain, Wind, Droplets, Thermometer, 
   Users, Truck, FileText, ClipboardList, AlertCircle, Plus, Trash2, 
   Calendar, Clock, Send, MapPin, Loader2, CheckCircle, XCircle, Info,
