@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
+
+const API_URL = import.meta.env.VITE_API_URL || 'https://bongankala.pythonanywhere.com';
 import { 
-  Lock, CheckCircle, Clock, Image, Sun, Cloud, CloudRain, 
+  Lock, CheckCircle, Clock, Image, Sparkles, Sun, Cloud, CloudRain, 
   Wind, Droplets, Thermometer, Users, Truck, FileText, 
   ClipboardList, AlertCircle, Plus, Trash2, Calendar, 
   Send, MapPin, Loader2, XCircle, Info, Unlock 
