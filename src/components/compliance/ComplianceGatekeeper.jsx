@@ -115,6 +115,14 @@ function ComplianceGatekeeper({ projectId, projectName, onAccessGranted, onCance
       const data = await response.json();
       console.log('Requirements data:', data);
 
+      // If the user has access, we don't care if requirements fail to load.
+      // Just bypass the check entirely.
+      if (accessData.has_access) {
+        onAccessGranted && onAccessGranted();
+        setLoading(false);
+        return;
+      }
+
       if (!response.ok) {
         setError(data.error || 'Failed to load compliance requirements.');
         setLoading(false);
