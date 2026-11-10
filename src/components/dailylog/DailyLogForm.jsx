@@ -954,7 +954,96 @@ function DailyLogForm({ projectId, onSuccess }) {
       >
         {submitting ? (
           <>
-            <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+            <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent">
+      {activeTab === 'safety' && (
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 space-y-4">
+          <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
+            <Shield className="h-4 w-4 text-red-500" /> Safety & Compliance
+          </h3>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">Toolbox Talk Topic</label>
+              <input type="text" className="w-full p-2 border border-gray-200 rounded-lg text-sm" 
+                value={formData.toolbox_talk_topic || ''} 
+                onChange={(e) => setFormData({...formData, toolbox_talk_topic: e.target.value})} />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">Attendees</label>
+              <input type="number" className="w-full p-2 border border-gray-200 rounded-lg text-sm" 
+                value={formData.safety_talk_attendees || 0} 
+                onChange={(e) => setFormData({...formData, safety_talk_attendees: parseInt(e.target.value) || 0})} />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">Near Misses</label>
+              <input type="number" className="w-full p-2 border border-gray-200 rounded-lg text-sm" 
+                value={formData.near_miss_count || 0} 
+                onChange={(e) => setFormData({...formData, near_miss_count: parseInt(e.target.value) || 0})} />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">First Aid Cases</label>
+              <input type="number" className="w-full p-2 border border-gray-200 rounded-lg text-sm" 
+                value={formData.first_aid_cases || 0} 
+                onChange={(e) => setFormData({...formData, first_aid_cases: parseInt(e.target.value) || 0})} />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'quality' && (
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 space-y-4">
+          <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
+            <CheckCircle className="h-4 w-4 text-green-500" /> Quality Control
+          </h3>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">Non-Conformance Count</label>
+              <input type="number" className="w-full p-2 border border-gray-200 rounded-lg text-sm" 
+                value={formData.non_conformance_count || 0} 
+                onChange={(e) => setFormData({...formData, non_conformance_count: parseInt(e.target.value) || 0})} />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">Rework Hours</label>
+              <input type="number" className="w-full p-2 border border-gray-200 rounded-lg text-sm" 
+                value={formData.rework_hours || 0} 
+                onChange={(e) => setFormData({...formData, rework_hours: parseFloat(e.target.value) || 0})} />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'delays' && (
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 space-y-4">
+          <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
+            <Clock className="h-4 w-4 text-yellow-500" /> Delays & Disruptions
+          </h3>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">Delay Duration (Hours)</label>
+              <input type="number" className="w-full p-2 border border-gray-200 rounded-lg text-sm" 
+                value={formData.delay_duration_hours || 0} 
+                onChange={(e) => setFormData({...formData, delay_duration_hours: parseFloat(e.target.value) || 0})} />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">Workers Idle</label>
+              <input type="number" className="w-full p-2 border border-gray-200 rounded-lg text-sm" 
+                value={formData.workers_idle || 0} 
+                onChange={(e) => setFormData({...formData, workers_idle: parseInt(e.target.value) || 0})} />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'photos' && (
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 space-y-4">
+          <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
+            <Image className="h-4 w-4 text-blue-500" /> Site Photos
+          </h3>
+          <div className="border-2 border-dashed border-gray-200 rounded-lg p-6 text-center">
+            <p className="text-sm text-gray-500">Upload site photos here (coming soon)</p>
+          </div>
+        </div>
+      )}
+    </div>
             Submitting...
           </>
         ) : (
