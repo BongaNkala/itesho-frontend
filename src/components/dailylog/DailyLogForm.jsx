@@ -469,7 +469,11 @@ function DailyLogForm({ projectId, onSuccess }) {
     { id: 'manpower', label: 'Manpower', icon: Users, color: 'from-emerald-500 to-teal-500' },
     { id: 'equipment', label: 'Equipment', icon: Truck, color: 'from-purple-500 to-indigo-500' },
     { id: 'boq', label: 'BOQ Progress', icon: FileText, color: 'from-amber-500 to-orange-500' },
-    { id: 'work', label: 'Work', icon: ClipboardList, color: 'from-rose-500 to-pink-500' }
+    { id: 'work', label: 'Work', icon: ClipboardList, color: 'from-rose-500 to-pink-500' },
+    { id: 'safety', label: 'Safety', icon: Shield, color: 'from-red-500 to-orange-500' },
+    { id: 'quality', label: 'Quality', icon: CheckCircle, color: 'from-green-500 to-emerald-500' },
+    { id: 'delays', label: 'Delays', icon: Clock, color: 'from-yellow-500 to-amber-500' },
+    { id: 'photos', label: 'Photos', icon: Camera, color: 'from-blue-500 to-cyan-500' }
   ];
 
   const handleNumberChange = (setter, field, value) => {
