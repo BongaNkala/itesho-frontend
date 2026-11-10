@@ -274,7 +274,7 @@ function DailyLogForm({ projectId, onSuccess }) {
       const flatten = (items) => {
         let result = [];
         for (const item of items) {
-          if (item.level >= 3) result.push(item);
+          if (item.level >= 1) result.push(item);
           if (item.children) result.push(...flatten(item.children));
         }
         return result;
