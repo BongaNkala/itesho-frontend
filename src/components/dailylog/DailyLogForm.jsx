@@ -1,8 +1,11 @@
-const API_URL = import.meta.env.VITE_API_URL || 'https://bongankala.pythonanywhere.com';
-const WEATHER_API_KEY = '886336475379f4ee302c0179d9be24ec';
-
 import { useState, useEffect } from "react";
-import { Lock, CheckCircle, Clock, Image, Sun, Cloud, CloudRain, Wind, Droplets, Thermometer, Users, Truck, FileText, ClipboardList, AlertCircle, Plus, Trash2, Calendar, Send, MapPin, Loader2, XCircle, Info, Unlock } from "lucide-react";
+import { 
+  Lock, CheckCircle, Clock, Image, Sun, Cloud, CloudRain, 
+  Wind, Droplets, Thermometer, Users, Truck, FileText, 
+  ClipboardList, AlertCircle, Plus, Trash2, Calendar, 
+  Send, MapPin, Loader2, XCircle, Info, Unlock 
+} from "lucide-react";
+
 import ComplianceGatekeeper from '../compliance/ComplianceGatekeeper';
 
 function DailyLogForm({ projectId, onSuccess }) {
