@@ -1,12 +1,12 @@
 const API_URL = import.meta.env.VITE_API_URL || 'https://bongankala.pythonanywhere.com';
 const WEATHER_API_KEY = '886336475379f4ee302c0179d9be24ec';
 
-import { Shield, CheckCircle, Clock, Camera, useState, useEffect } from 'react';
-import { Shield, CheckCircle, Clock, Camera, 
+import { Lock, CheckCircle, Clock, Image, useState, useEffect } from 'react';
+import { Lock, CheckCircle, Clock, Image, 
   Sparkles, Sun, Cloud, CloudRain, Wind, Droplets, Thermometer, 
   Users, Truck, FileText, ClipboardList, AlertCircle, Plus, Trash2, 
   Calendar, Clock, Send, MapPin, Loader2, CheckCircle, XCircle, Info,
-  Lock, Unlock, Shield
+  Lock, Unlock, Lock
 } from 'lucide-react';
 import ComplianceGatekeeper from '../compliance/ComplianceGatekeeper';
 
@@ -470,10 +470,10 @@ function DailyLogForm({ projectId, onSuccess }) {
     { id: 'equipment', label: 'Equipment', icon: Truck, color: 'from-purple-500 to-indigo-500' },
     { id: 'boq', label: 'BOQ Progress', icon: FileText, color: 'from-amber-500 to-orange-500' },
     { id: 'work', label: 'Work', icon: ClipboardList, color: 'from-rose-500 to-pink-500' },
-    { id: 'safety', label: 'Safety', icon: Shield, color: 'from-red-500 to-orange-500' },
+    { id: 'safety', label: 'Safety', icon: Lock, color: 'from-red-500 to-orange-500' },
     { id: 'quality', label: 'Quality', icon: CheckCircle, color: 'from-green-500 to-emerald-500' },
     { id: 'delays', label: 'Delays', icon: Clock, color: 'from-yellow-500 to-amber-500' },
-    { id: 'photos', label: 'Photos', icon: Camera, color: 'from-blue-500 to-cyan-500' }
+    { id: 'photos', label: 'Photos', icon: Image, color: 'from-blue-500 to-cyan-500' }
   ];
 
   const handleNumberChange = (setter, field, value) => {
