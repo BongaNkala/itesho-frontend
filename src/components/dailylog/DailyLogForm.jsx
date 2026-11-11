@@ -39,6 +39,18 @@ function DailyLogForm({ projectId, onSuccess }) {
   const [newManpower, setNewManpower] = useState({ role: '', count: '', hoursWorked: '' });
 
   const [equipment, setEquipment] = useState([]);
+
+  const [formData, setFormData] = useState({
+    toolbox_talk_topic: '',
+    safety_talk_attendees: 0,
+    near_miss_count: 0,
+    first_aid_cases: 0,
+    non_conformance_count: 0,
+    rework_hours: 0,
+    delay_duration_hours: 0,
+    workers_idle: 0
+  });
+
   const [newEquipment, setNewEquipment] = useState({
     name: '',
     status: 'operational',
