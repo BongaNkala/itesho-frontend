@@ -40,6 +40,7 @@ function DailyLogForm({ projectId, onSuccess }) {
 
   const [equipment, setEquipment] = useState([]);
 
+  const [photos, setPhotos] = useState([]);
   const [formData, setFormData] = useState({
     toolbox_talk_topic: '',
     safety_talk_attendees: 0,
@@ -78,7 +79,23 @@ function DailyLogForm({ projectId, onSuccess }) {
         setError(null);
         setInfo(null);
       }, 5000);
-      return () => clearTimeout(timer);
+      
+  const handlePhotoUpload = (e) => {
+    const files = Array.from(e.target.files);
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPhotos(prev => [...prev, { name: file.name, url: reader.result }]);
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const removePhoto = (index) => {
+    setPhotos(prev => prev.filter((_, i) => i !== index));
+  };
+
+  return () => clearTimeout(timer);
     }
   }, [success, error, info]);
 
@@ -382,6 +399,7 @@ function DailyLogForm({ projectId, onSuccess }) {
         project: projectIdNum,
         log_date: date,
         work_description: workDescription,
+        photos: photos.map(p => p.url),
         weather: weather.condition,
         temperature: weather.temperature ? parseFloat(weather.temperature) : null,
         status: 'submitted'
@@ -1041,9 +1059,37 @@ function DailyLogForm({ projectId, onSuccess }) {
           <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
             <Image className="h-4 w-4 text-blue-500" /> Site Photos
           </h3>
+          
           <div className="border-2 border-dashed border-gray-200 rounded-lg p-6 text-center">
-            <p className="text-sm text-gray-500">Upload site photos here (coming soon)</p>
+            <input 
+              type="file" 
+              multiple 
+              accept="image/*" 
+              onChange={handlePhotoUpload} 
+              className="hidden" 
+              id="photo-upload" 
+            />
+            <label htmlFor="photo-upload" className="cursor-pointer flex flex-col items-center gap-2">
+              <Plus className="h-8 w-8 text-gray-400" />
+              <p className="text-sm text-gray-500">Click to upload or drag photos here</p>
+            </label>
           </div>
+
+          {photos.length > 0 && (
+            <div className="grid grid-cols-3 gap-3 mt-4">
+              {photos.map((photo, idx) => (
+                <div key={idx} className="relative group rounded-lg overflow-hidden border border-gray-200">
+                  <img src={photo.url} alt={photo.name} className="w-full h-24 object-cover" />
+                  <button 
+                    onClick={() => removePhoto(idx)}
+                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <Trash2 className="h-3 w-3" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
