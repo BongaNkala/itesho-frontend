@@ -970,7 +970,7 @@ function DailyLogForm({ projectId, onSuccess }) {
       {activeTab === 'safety' && (
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 space-y-4">
           <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
-            <Shield className="h-4 w-4 text-red-500" /> Safety & Compliance
+            <Lock className="h-4 w-4 text-red-500" /> Safety & Compliance
           </h3>
           <div className="grid grid-cols-2 gap-4">
             <div>
