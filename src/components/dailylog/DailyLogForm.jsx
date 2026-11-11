@@ -947,14 +947,6 @@ function DailyLogForm({ projectId, onSuccess }) {
       )}
 
       {/* Submit Button */}
-      <button 
-        onClick={handleSubmit} 
-        disabled={submitting || !workDescription.trim() || boqEntries.length === 0} 
-        className="w-full bg-gradient-to-r from-orange-500 to-amber-600 text-white py-3.5 rounded-xl text-sm font-semibold hover:from-orange-600 hover:to-amber-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg flex items-center justify-center gap-2"
-      >
-        {submitting ? (
-          <>
-            <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent">
       {activeTab === 'safety' && (
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 space-y-4">
           <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
@@ -1043,6 +1035,15 @@ function DailyLogForm({ projectId, onSuccess }) {
           </div>
         </div>
       )}
+
+      <button 
+        onClick={handleSubmit} 
+        disabled={submitting || !workDescription.trim() || boqEntries.length === 0} 
+        className="w-full bg-gradient-to-r from-orange-500 to-amber-600 text-white py-3.5 rounded-xl text-sm font-semibold hover:from-orange-600 hover:to-amber-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg flex items-center justify-center gap-2"
+      >
+        {submitting ? (
+          <>
+            <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent">
     </div>
             Submitting...
           </>
