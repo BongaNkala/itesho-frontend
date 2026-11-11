@@ -646,7 +646,7 @@ function DailyLogForm({ projectId, onSuccess }) {
                 <div className="p-1 rounded-lg bg-sky-100">
                   <Sun className="h-3.5 w-3.5 text-sky-600" />
                 </div>
-                <h3 className="text-sm font-semibold text-gray-800">Weather Conditions</h3>
+                <h3 className="text-sm font-semibold text-white">Weather Conditions</h3>
                 <span className="text-[10px] text-gray-400 ml-2">(auto-fetched)</span>
               </div>
               <div className="flex items-center gap-2">
@@ -674,7 +674,7 @@ function DailyLogForm({ projectId, onSuccess }) {
           <div className="p-5">
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1.5 flex items-center gap-1">
+                <label className="block text-xs font-medium text-slate-300 mb-1.5 flex items-center gap-1">
                   <Calendar className="h-3 w-3 text-gray-400" /> Log Date
                 </label>
                 <input 
@@ -685,7 +685,7 @@ function DailyLogForm({ projectId, onSuccess }) {
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1.5 flex items-center gap-1">
+                <label className="block text-xs font-medium text-slate-300 mb-1.5 flex items-center gap-1">
                   <Cloud className="h-3 w-3 text-gray-400" /> Condition
                 </label>
                 <div className="flex items-center gap-2 w-full p-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed">
@@ -700,7 +700,7 @@ function DailyLogForm({ projectId, onSuccess }) {
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1.5 flex items-center gap-1">
+                <label className="block text-xs font-medium text-slate-300 mb-1.5 flex items-center gap-1">
                   <Thermometer className="h-3 w-3 text-gray-400" /> Temperature (°C)
                 </label>
                 <input 
@@ -711,7 +711,7 @@ function DailyLogForm({ projectId, onSuccess }) {
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1.5 flex items-center gap-1">
+                <label className="block text-xs font-medium text-slate-300 mb-1.5 flex items-center gap-1">
                   <Droplets className="h-3 w-3 text-gray-400" /> Humidity (%)
                 </label>
                 <input 
@@ -722,7 +722,7 @@ function DailyLogForm({ projectId, onSuccess }) {
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1.5 flex items-center gap-1">
+                <label className="block text-xs font-medium text-slate-300 mb-1.5 flex items-center gap-1">
                   <Wind className="h-3 w-3 text-gray-400" /> Wind Speed (km/h)
                 </label>
                 <input 
@@ -733,7 +733,7 @@ function DailyLogForm({ projectId, onSuccess }) {
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1.5 flex items-center gap-1">
+                <label className="block text-xs font-medium text-slate-300 mb-1.5 flex items-center gap-1">
                   <CloudRain className="h-3 w-3 text-gray-400" /> Rainfall (mm)
                 </label>
                 <input 
@@ -745,7 +745,7 @@ function DailyLogForm({ projectId, onSuccess }) {
               </div>
             </div>
             <div className="mt-4">
-              <label className="block text-xs font-medium text-gray-600 mb-1.5">Additional Notes</label>
+              <label className="block text-xs font-medium text-slate-300 mb-1.5">Additional Notes</label>
               <textarea 
                 className="w-full p-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed" 
                 rows="2" 
@@ -761,7 +761,7 @@ function DailyLogForm({ projectId, onSuccess }) {
       {activeTab === 'manpower' && (
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
           <div className="px-5 py-4 border-b border-gray-100 bg-gradient-to-r from-emerald-50 to-teal-50">
-            <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
+            <h3 className="text-sm font-semibold text-white flex items-center gap-2">
               <div className="p-1 rounded-lg bg-emerald-100">
                 <Users className="h-3.5 w-3.5 text-emerald-600" />
               </div>
@@ -814,7 +814,7 @@ function DailyLogForm({ projectId, onSuccess }) {
       {activeTab === 'equipment' && (
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
           <div className="px-5 py-4 border-b border-gray-100 bg-gradient-to-r from-purple-50 to-indigo-50">
-            <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
+            <h3 className="text-sm font-semibold text-white flex items-center gap-2">
               <div className="p-1 rounded-lg bg-purple-100">
                 <Truck className="h-3.5 w-3.5 text-purple-600" />
               </div>
@@ -865,7 +865,7 @@ function DailyLogForm({ projectId, onSuccess }) {
       {activeTab === 'boq' && (
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
           <div className="px-5 py-4 border-b border-gray-100 bg-gradient-to-r from-amber-50 to-orange-50">
-            <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
+            <h3 className="text-sm font-semibold text-white flex items-center gap-2">
               <div className="p-1 rounded-lg bg-amber-100">
                 <FileText className="h-3.5 w-3.5 text-amber-600" />
               </div>
@@ -914,7 +914,7 @@ function DailyLogForm({ projectId, onSuccess }) {
       {activeTab === 'work' && (
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
           <div className="px-5 py-4 border-b border-gray-100 bg-gradient-to-r from-rose-50 to-pink-50">
-            <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
+            <h3 className="text-sm font-semibold text-white flex items-center gap-2">
               <div className="p-1 rounded-lg bg-rose-100">
                 <ClipboardList className="h-3.5 w-3.5 text-rose-600" />
               </div>
@@ -930,15 +930,15 @@ function DailyLogForm({ projectId, onSuccess }) {
                 <textarea rows="4" className="w-full p-3 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-rose-500" value={workDescription} onChange={(e) => setWorkDescription(e.target.value)} placeholder="Describe the work completed today in detail..." />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1.5">Safety Notes</label>
+                <label className="block text-xs font-medium text-slate-300 mb-1.5">Safety Notes</label>
                 <textarea rows="2" className="w-full p-2.5 text-sm border border-gray-200 rounded-lg" value={safetyNotes} onChange={(e) => setSafetyNotes(e.target.value)} placeholder="Any safety observations or incidents..." />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1.5">Issues Encountered</label>
+                <label className="block text-xs font-medium text-slate-300 mb-1.5">Issues Encountered</label>
                 <textarea rows="2" className="w-full p-2.5 text-sm border border-gray-200 rounded-lg" value={issuesEncountered} onChange={(e) => setIssuesEncountered(e.target.value)} placeholder="Any problems, delays, or challenges..." />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1.5">Next Day Plan</label>
+                <label className="block text-xs font-medium text-slate-300 mb-1.5">Next Day Plan</label>
                 <textarea rows="2" className="w-full p-2.5 text-sm border border-gray-200 rounded-lg" value={nextDayPlan} onChange={(e) => setNextDayPlan(e.target.value)} placeholder="Planned activities for tomorrow..." />
               </div>
             </div>
@@ -948,32 +948,32 @@ function DailyLogForm({ projectId, onSuccess }) {
 
       {/* Submit Button */}
       {activeTab === 'safety' && (
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 space-y-4">
-          <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
+        <div className="bg-slate-800 rounded-xl border border-slate-700 shadow-sm p-5 space-y-4">
+          <h3 className="text-sm font-semibold text-white flex items-center gap-2">
             <Lock className="h-4 w-4 text-red-500" /> Safety & Compliance
           </h3>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Toolbox Talk Topic</label>
-              <input type="text" className="w-full p-2 border border-gray-200 rounded-lg text-sm" 
+              <label className="block text-xs font-medium text-slate-300 mb-1">Toolbox Talk Topic</label>
+              <input type="text" className="w-full p-2 bg-slate-900 border border-slate-700 rounded-lg text-sm text-white" 
                 value={formData.toolbox_talk_topic || ''} 
                 onChange={(e) => setFormData({...formData, toolbox_talk_topic: e.target.value})} />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Attendees</label>
-              <input type="number" className="w-full p-2 border border-gray-200 rounded-lg text-sm" 
+              <label className="block text-xs font-medium text-slate-300 mb-1">Attendees</label>
+              <input type="number" className="w-full p-2 bg-slate-900 border border-slate-700 rounded-lg text-sm text-white" 
                 value={formData.safety_talk_attendees || 0} 
                 onChange={(e) => setFormData({...formData, safety_talk_attendees: parseInt(e.target.value) || 0})} />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Near Misses</label>
-              <input type="number" className="w-full p-2 border border-gray-200 rounded-lg text-sm" 
+              <label className="block text-xs font-medium text-slate-300 mb-1">Near Misses</label>
+              <input type="number" className="w-full p-2 bg-slate-900 border border-slate-700 rounded-lg text-sm text-white" 
                 value={formData.near_miss_count || 0} 
                 onChange={(e) => setFormData({...formData, near_miss_count: parseInt(e.target.value) || 0})} />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">First Aid Cases</label>
-              <input type="number" className="w-full p-2 border border-gray-200 rounded-lg text-sm" 
+              <label className="block text-xs font-medium text-slate-300 mb-1">First Aid Cases</label>
+              <input type="number" className="w-full p-2 bg-slate-900 border border-slate-700 rounded-lg text-sm text-white" 
                 value={formData.first_aid_cases || 0} 
                 onChange={(e) => setFormData({...formData, first_aid_cases: parseInt(e.target.value) || 0})} />
             </div>
@@ -982,20 +982,20 @@ function DailyLogForm({ projectId, onSuccess }) {
       )}
 
       {activeTab === 'quality' && (
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 space-y-4">
-          <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
+        <div className="bg-slate-800 rounded-xl border border-slate-700 shadow-sm p-5 space-y-4">
+          <h3 className="text-sm font-semibold text-white flex items-center gap-2">
             <CheckCircle className="h-4 w-4 text-green-500" /> Quality Control
           </h3>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Non-Conformance Count</label>
-              <input type="number" className="w-full p-2 border border-gray-200 rounded-lg text-sm" 
+              <label className="block text-xs font-medium text-slate-300 mb-1">Non-Conformance Count</label>
+              <input type="number" className="w-full p-2 bg-slate-900 border border-slate-700 rounded-lg text-sm text-white" 
                 value={formData.non_conformance_count || 0} 
                 onChange={(e) => setFormData({...formData, non_conformance_count: parseInt(e.target.value) || 0})} />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Rework Hours</label>
-              <input type="number" className="w-full p-2 border border-gray-200 rounded-lg text-sm" 
+              <label className="block text-xs font-medium text-slate-300 mb-1">Rework Hours</label>
+              <input type="number" className="w-full p-2 bg-slate-900 border border-slate-700 rounded-lg text-sm text-white" 
                 value={formData.rework_hours || 0} 
                 onChange={(e) => setFormData({...formData, rework_hours: parseFloat(e.target.value) || 0})} />
             </div>
@@ -1004,20 +1004,20 @@ function DailyLogForm({ projectId, onSuccess }) {
       )}
 
       {activeTab === 'delays' && (
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 space-y-4">
-          <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
+        <div className="bg-slate-800 rounded-xl border border-slate-700 shadow-sm p-5 space-y-4">
+          <h3 className="text-sm font-semibold text-white flex items-center gap-2">
             <Clock className="h-4 w-4 text-yellow-500" /> Delays & Disruptions
           </h3>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Delay Duration (Hours)</label>
-              <input type="number" className="w-full p-2 border border-gray-200 rounded-lg text-sm" 
+              <label className="block text-xs font-medium text-slate-300 mb-1">Delay Duration (Hours)</label>
+              <input type="number" className="w-full p-2 bg-slate-900 border border-slate-700 rounded-lg text-sm text-white" 
                 value={formData.delay_duration_hours || 0} 
                 onChange={(e) => setFormData({...formData, delay_duration_hours: parseFloat(e.target.value) || 0})} />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Workers Idle</label>
-              <input type="number" className="w-full p-2 border border-gray-200 rounded-lg text-sm" 
+              <label className="block text-xs font-medium text-slate-300 mb-1">Workers Idle</label>
+              <input type="number" className="w-full p-2 bg-slate-900 border border-slate-700 rounded-lg text-sm text-white" 
                 value={formData.workers_idle || 0} 
                 onChange={(e) => setFormData({...formData, workers_idle: parseInt(e.target.value) || 0})} />
             </div>
@@ -1026,12 +1026,12 @@ function DailyLogForm({ projectId, onSuccess }) {
       )}
 
       {activeTab === 'photos' && (
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 space-y-4">
-          <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
+        <div className="bg-slate-800 rounded-xl border border-slate-700 shadow-sm p-5 space-y-4">
+          <h3 className="text-sm font-semibold text-white flex items-center gap-2">
             <Image className="h-4 w-4 text-blue-500" /> Site Photos
           </h3>
           <div className="border-2 border-dashed border-gray-200 rounded-lg p-6 text-center">
-            <p className="text-sm text-gray-500">Upload site photos here (coming soon)</p>
+            <p className="text-sm text-slate-400">Upload site photos here (coming soon)</p>
           </div>
         </div>
       )}
