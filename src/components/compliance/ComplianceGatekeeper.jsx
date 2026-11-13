@@ -30,8 +30,7 @@ export default function ComplianceGatekeeper({ projectId, projectName, onAccessG
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const accessData = await accessRes.json();
-      setHasAccess(accessData.has_access || false);
-
+      
       // 2. Fetch requirements
       const reqRes = await fetch(`${API_URL}/api/compliance/contractor-requirements/?project_id=${projectId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
@@ -40,6 +39,16 @@ export default function ComplianceGatekeeper({ projectId, projectName, onAccessG
       
       const reqs = reqData.requirements || [];
       setRequirements(reqs);
+      
+      // STRICT CHECK: Do not grant access if any mandatory requirement is not approved
+      const hasMissingMandatory = reqs.some(r => r.is_mandatory && r.status !== 'approved');
+      
+      // If backend says has_access is true BUT there are missing mandatory docs, block it.
+      if (accessData.has_access && !hasMissingMandatory) {
+        setHasAccess(true);
+      } else {
+        setHasAccess(false);
+      }
       
       setStats({
         total: reqData.total_count || 0,
@@ -53,24 +62,6 @@ export default function ComplianceGatekeeper({ projectId, projectName, onAccessG
     }
   };
 
-  const handleSubmit = async (reqId, notes, docName, docUrl) => {
-    const token = localStorage.getItem('access_token');
-    try {
-      const res = await fetch(`${API_URL}/api/compliance/submit-requirement/`, {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ requirement_id: reqId, notes, document_name: docName, document_url: docUrl })
-      });
-      if (res.ok) {
-        fetchData(); // Refresh the list
-      } else {
-        alert('Failed to submit requirement');
-      }
-    } catch (err) {
-      alert('Error submitting requirement');
-    }
-  };
-
   if (loading) return <div className="p-8 text-center text-slate-400"><Loader2 className="h-8 w-8 animate-spin mx-auto mb-2" /> Loading compliance...</div>;
   if (error) return <div className="p-8 text-center text-red-400 bg-red-500/10 rounded-xl"><AlertTriangle className="h-8 w-8 mx-auto mb-2" /> {error} <button onClick={fetchData} className="block mx-auto mt-4 text-sm text-white underline">Retry</button></div>;
 
@@ -79,53 +70,50 @@ export default function ComplianceGatekeeper({ projectId, projectName, onAccessG
       <div className="flex justify-between items-start mb-6">
         <div>
           <h2 className="text-xl font-bold flex items-center gap-2">
-            {hasAccess ? <Unlock className="h-6 w-6 text-green-400" /> : <Lock className="h-6 w-6 text-orange-400" />}
-            Compliance Checklist
+            {hasAccess ? <Unlock className="h-6 w-6 text-green-400" /> : <Lock className="h-6 w-6 text-red-500" />}
+            Compliance Gatekeeper
           </h2>
           <p className="text-sm text-slate-400 mt-1">Project: {projectName}</p>
         </div>
-        <div className={`px-3 py-1 rounded-full text-xs font-bold ${hasAccess ? 'bg-green-500/20 text-green-400' : 'bg-orange-500/20 text-orange-400'}`}>
-          {hasAccess ? '✅ Access Granted' : '⛔ Access Locked'}
+        <div className={`px-3 py-1 rounded-full text-xs font-bold ${hasAccess ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+          {hasAccess ? '✅ Access Granted' : '⛔ Access Denied'}
         </div>
       </div>
 
       <div className="grid grid-cols-3 gap-4 mb-6">
-        <div className="bg-slate-800 p-4 rounded-lg border border-slate-700"><div className="text-xs text-slate-400">Total</div><div className="text-2xl font-bold">{stats.total}</div></div>
+        <div className="bg-slate-800 p-4 rounded-lg border border-slate-700"><div className="text-xs text-slate-400">Total Required</div><div className="text-2xl font-bold">{stats.total}</div></div>
         <div className="bg-slate-800 p-4 rounded-lg border border-slate-700"><div className="text-xs text-slate-400">Approved</div><div className="text-2xl font-bold text-green-400">{stats.approved}</div></div>
-        <div className="bg-slate-800 p-4 rounded-lg border border-slate-700"><div className="text-xs text-slate-400">Pending</div><div className="text-2xl font-bold text-yellow-400">{stats.pending}</div></div>
+        <div className="bg-slate-800 p-4 rounded-lg border border-slate-700"><div className="text-xs text-slate-400">Missing / Pending</div><div className="text-2xl font-bold text-red-400">{stats.total - stats.approved}</div></div>
       </div>
 
-      {requirements.length === 0 ? (
-        <div className="text-center py-8">
-          <Shield className="h-12 w-12 text-green-400 mx-auto mb-3" />
-          <p className="text-slate-300">No compliance requirements for this project.</p>
-          <button onClick={onAccessGranted} className="mt-4 px-6 py-2 bg-orange-500 rounded-lg font-medium hover:bg-orange-600 transition">Continue</button>
-        </div>
-      ) : (
-        <div className="space-y-3">
-          {requirements.map(req => (
-            <div key={req.id} className={`p-4 rounded-lg border ${req.status === 'approved' ? 'bg-green-500/10 border-green-500/30' : 'bg-slate-800 border-slate-700'}`}>
-              <div className="flex justify-between items-start">
-                <div>
-                  <div className="font-semibold flex items-center gap-2">
-                    {req.title} 
-                    {req.is_mandatory && <span className="text-[10px] bg-red-500/20 text-red-400 px-2 py-0.5 rounded">MANDATORY</span>}
-                  </div>
-                  <p className="text-xs text-slate-400 mt-1">{req.description}</p>
+      <div className="space-y-3">
+        {requirements.map(req => (
+          <div key={req.id} className={`p-4 rounded-lg border ${req.status === 'approved' ? 'bg-green-500/10 border-green-500/30' : 'bg-slate-800 border-slate-700'}`}>
+            <div className="flex justify-between items-start">
+              <div>
+                <div className="font-semibold flex items-center gap-2">
+                  {req.title} 
+                  {req.is_mandatory && <span className="text-[10px] bg-red-500/20 text-red-400 px-2 py-0.5 rounded">MANDATORY</span>}
                 </div>
-                <span className={`text-xs px-2 py-1 rounded font-medium ${req.status === 'approved' ? 'text-green-400' : req.status === 'submitted' ? 'text-yellow-400' : 'text-slate-400'}`}>
-                  {req.status.toUpperCase()}
-                </span>
+                <p className="text-xs text-slate-400 mt-1">{req.description}</p>
               </div>
+              <span className={`text-xs px-2 py-1 rounded font-medium ${req.status === 'approved' ? 'text-green-400' : req.status === 'submitted' ? 'text-yellow-400' : 'text-red-400'}`}>
+                {req.status.toUpperCase()}
+              </span>
             </div>
-          ))}
-        </div>
-      )}
+          </div>
+        ))}
+      </div>
 
-      {hasAccess && (
-        <button onClick={onAccessGranted} className="w-full mt-6 bg-gradient-to-r from-orange-500 to-amber-600 text-white py-3 rounded-xl font-bold shadow-lg hover:from-orange-600 transition">
+      {hasAccess ? (
+        <button onClick={onAccessGranted} className="w-full mt-6 bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 rounded-xl font-bold shadow-lg hover:from-green-600 transition">
           Continue to Daily Log <ArrowRight className="h-4 w-4 inline" />
         </button>
+      ) : (
+        <div className="mt-6 p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-center">
+          <p className="text-sm text-red-400 font-medium">Access Blocked</p>
+          <p className="text-xs text-red-300 mt-1">You must upload all mandatory documents and have them approved by the PM before accessing this project.</p>
+        </div>
       )}
     </div>
   );
