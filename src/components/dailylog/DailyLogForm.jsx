@@ -1,12 +1,7 @@
 import { useState, useEffect } from "react";
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://bongankala.pythonanywhere.com';
-import { 
-  Lock, CheckCircle, Clock, Image, Sparkles, Sun, Cloud, CloudRain, 
-  Wind, Droplets, Thermometer, Users, Truck, FileText, 
-  ClipboardList, AlertCircle, Plus, Trash2, Calendar, 
-  Send, MapPin, Loader2, XCircle, Info, Unlock 
-} from "lucide-react";
+import { Lock, CheckCircle, Clock, Image, Sparkles, Sun, Cloud, CloudRain, Wind, Droplets, Thermometer, Users, Truck, FileText, ClipboardList, AlertCircle, Plus, Trash2, Calendar, Send, MapPin, Loader2, XCircle, Info, Unlock, Shield } from "lucide-react";
 
 import ComplianceGatekeeper from '../compliance/ComplianceGatekeeper';
 
@@ -39,19 +34,6 @@ function DailyLogForm({ projectId, onSuccess }) {
   const [newManpower, setNewManpower] = useState({ role: '', count: '', hoursWorked: '' });
 
   const [equipment, setEquipment] = useState([]);
-
-  const [photos, setPhotos] = useState([]);
-  const [formData, setFormData] = useState({
-    toolbox_talk_topic: '',
-    safety_talk_attendees: 0,
-    near_miss_count: 0,
-    first_aid_cases: 0,
-    non_conformance_count: 0,
-    rework_hours: 0,
-    delay_duration_hours: 0,
-    workers_idle: 0
-  });
-
   const [newEquipment, setNewEquipment] = useState({
     name: '',
     status: 'operational',
@@ -79,24 +61,9 @@ function DailyLogForm({ projectId, onSuccess }) {
         setError(null);
         setInfo(null);
       }, 5000);
+      return () => clearTimeout(timer);
     }
-
-  const handlePhotoUpload = (e) => {
-    const files = Array.from(e.target.files);
-    files.forEach(file => {
-      // Create a preview URL for the UI
-      const previewUrl = URL.createObjectURL(file);
-      setPhotos(prev => [...prev, { name: file.name, url: previewUrl, file: file }]);
-    });
-  };
-
-
-  const removePhoto = (index) => {
-    setPhotos(prev => prev.filter((_, i) => i !== index));
-  };
-
-  return () => clearTimeout(timer);
-    }
+  }, [success, error, info]);
 
   // Check compliance when component mounts
   useEffect(() => {
@@ -398,7 +365,6 @@ function DailyLogForm({ projectId, onSuccess }) {
         project: projectIdNum,
         log_date: date,
         work_description: workDescription,
-        photos: uploadedUrls,
         weather: weather.condition,
         temperature: weather.temperature ? parseFloat(weather.temperature) : null,
         status: 'submitted'
@@ -584,6 +550,19 @@ function DailyLogForm({ projectId, onSuccess }) {
   };
 
   // Show compliance gatekeeper if needed
+  
+  const handlePhotoUpload = (e) => {
+    const files = Array.from(e.target.files);
+    files.forEach(file => {
+      const previewUrl = URL.createObjectURL(file);
+      setPhotos(prev => [...prev, { name: file.name, url: previewUrl, file: file }]);
+    });
+  };
+
+  const removePhoto = (index) => {
+    setPhotos(prev => prev.filter((_, i) => i !== index));
+  };
+
   if (checkingCompliance) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -975,10 +954,19 @@ function DailyLogForm({ projectId, onSuccess }) {
         </div>
       )}
 
+      {/* Submit Button */}
+      <button 
+        onClick={handleSubmit} 
+        disabled={submitting || !workDescription.trim() || boqEntries.length === 0} 
+        className="w-full bg-gradient-to-r from-orange-500 to-amber-600 text-white py-3.5 rounded-xl text-sm font-semibold hover:from-orange-600 hover:to-amber-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg flex items-center justify-center gap-2"
+      >
+        {submitting ? (
+          <>
+            <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent">
       {activeTab === 'safety' && (
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 space-y-4">
           <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
-            <Lock className="h-4 w-4 text-red-500" /> Safety & Compliance
+            <Shield className="h-4 w-4 text-red-500" /> Safety & Compliance
           </h3>
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -1058,50 +1046,11 @@ function DailyLogForm({ projectId, onSuccess }) {
           <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
             <Image className="h-4 w-4 text-blue-500" /> Site Photos
           </h3>
-          
           <div className="border-2 border-dashed border-gray-200 rounded-lg p-6 text-center">
-            <input 
-              type="file" 
-              multiple 
-              accept="image/*" 
-              onChange={handlePhotoUpload} 
-              className="hidden" 
-              id="photo-upload" 
-            />
-            <label htmlFor="photo-upload" className="cursor-pointer flex flex-col items-center gap-2">
-              <Plus className="h-8 w-8 text-gray-400" />
-              <p className="text-sm text-gray-500">Click to upload or drag photos here</p>
-            </label>
+            <p className="text-sm text-gray-500">Upload site photos here (coming soon)</p>
           </div>
-
-          {photos.length > 0 && (
-            <div className="grid grid-cols-3 gap-3 mt-4">
-              {photos.map((photo, idx) => (
-                <div key={idx} className="relative group rounded-lg overflow-hidden border border-gray-200">
-                  <img src={photo.url} alt={photo.name} className="w-full h-24 object-cover" />
-                  <button 
-                    onClick={() => removePhoto(idx)}
-                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <Trash2 className="h-3 w-3" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
         </div>
       )}
-
-      {/* Submit Button */}
-      <button 
-        onClick={handleSubmit} 
-        disabled={submitting || !workDescription.trim() || boqEntries.length === 0} 
-        className="w-full bg-gradient-to-r from-orange-500 to-amber-600 text-white py-3.5 rounded-xl text-sm font-semibold hover:from-orange-600 hover:to-amber-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg flex items-center justify-center gap-2"
-      >
-        {submitting ? (
-          <>
-            <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent">
-      
     </div>
             Submitting...
           </>
