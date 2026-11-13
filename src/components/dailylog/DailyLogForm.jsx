@@ -80,7 +80,6 @@ function DailyLogForm({ projectId, onSuccess }) {
         setInfo(null);
       }, 5000);
     }
-  }, [success, error, info]);
 
   const handlePhotoUpload = (e) => {
     const files = Array.from(e.target.files);
@@ -98,7 +97,6 @@ function DailyLogForm({ projectId, onSuccess }) {
 
   return () => clearTimeout(timer);
     }
-  }, [success, error, info]);
 
   // Check compliance when component mounts
   useEffect(() => {
