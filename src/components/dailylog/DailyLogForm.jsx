@@ -948,55 +948,33 @@ function DailyLogForm({ projectId, onSuccess }) {
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1.5">Next Day Plan</label>
                 <textarea rows="2" className="w-full p-2.5 text-sm border border-gray-200 rounded-lg" value={nextDayPlan} onChange={(e) => setNextDayPlan(e.target.value)} placeholder="Planned activities for tomorrow..." />
-              </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Submit Button */}
-      <button 
-        onClick={handleSubmit} 
-        disabled={submitting || !workDescription.trim() || boqEntries.length === 0} 
-        className="w-full bg-gradient-to-r from-orange-500 to-amber-600 text-white py-3.5 rounded-xl text-sm font-semibold hover:from-orange-600 hover:to-amber-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg flex items-center justify-center gap-2"
-      >
-        {submitting ? (
-          <>
-            <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent">
+      {/* SAFETY TAB */}
       {activeTab === 'safety' && (
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 space-y-4">
           <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
-            <Shield className="h-4 w-4 text-red-500" /> Safety & Compliance
+            <Lock className="h-4 w-4 text-red-500" /> Safety & Compliance
           </h3>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">Toolbox Talk Topic</label>
               <input type="text" className="w-full p-2 border border-gray-200 rounded-lg text-sm" 
-                value={formData.toolbox_talk_topic || ''} 
-                onChange={(e) => setFormData({...formData, toolbox_talk_topic: e.target.value})} />
+                value={formData.toolbox_talk_topic} onChange={(e) => setFormData({...formData, toolbox_talk_topic: e.target.value})} />
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">Attendees</label>
               <input type="number" className="w-full p-2 border border-gray-200 rounded-lg text-sm" 
-                value={formData.safety_talk_attendees || 0} 
-                onChange={(e) => setFormData({...formData, safety_talk_attendees: parseInt(e.target.value) || 0})} />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Near Misses</label>
-              <input type="number" className="w-full p-2 border border-gray-200 rounded-lg text-sm" 
-                value={formData.near_miss_count || 0} 
-                onChange={(e) => setFormData({...formData, near_miss_count: parseInt(e.target.value) || 0})} />
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">First Aid Cases</label>
-              <input type="number" className="w-full p-2 border border-gray-200 rounded-lg text-sm" 
-                value={formData.first_aid_cases || 0} 
-                onChange={(e) => setFormData({...formData, first_aid_cases: parseInt(e.target.value) || 0})} />
+                value={formData.safety_talk_attendees} onChange={(e) => setFormData({...formData, safety_talk_attendees: parseInt(e.target.value) || 0})} />
             </div>
           </div>
         </div>
       )}
 
+      {/* QUALITY TAB */}
       {activeTab === 'quality' && (
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 space-y-4">
           <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
@@ -1006,19 +984,18 @@ function DailyLogForm({ projectId, onSuccess }) {
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">Non-Conformance Count</label>
               <input type="number" className="w-full p-2 border border-gray-200 rounded-lg text-sm" 
-                value={formData.non_conformance_count || 0} 
-                onChange={(e) => setFormData({...formData, non_conformance_count: parseInt(e.target.value) || 0})} />
+                value={formData.non_conformance_count} onChange={(e) => setFormData({...formData, non_conformance_count: parseInt(e.target.value) || 0})} />
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">Rework Hours</label>
               <input type="number" className="w-full p-2 border border-gray-200 rounded-lg text-sm" 
-                value={formData.rework_hours || 0} 
-                onChange={(e) => setFormData({...formData, rework_hours: parseFloat(e.target.value) || 0})} />
+                value={formData.rework_hours} onChange={(e) => setFormData({...formData, rework_hours: parseFloat(e.target.value) || 0})} />
             </div>
           </div>
         </div>
       )}
 
+      {/* DELAYS TAB */}
       {activeTab === 'delays' && (
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 space-y-4">
           <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
@@ -1028,57 +1005,54 @@ function DailyLogForm({ projectId, onSuccess }) {
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">Delay Duration (Hours)</label>
               <input type="number" className="w-full p-2 border border-gray-200 rounded-lg text-sm" 
-                value={formData.delay_duration_hours || 0} 
-                onChange={(e) => setFormData({...formData, delay_duration_hours: parseFloat(e.target.value) || 0})} />
+                value={formData.delay_duration_hours} onChange={(e) => setFormData({...formData, delay_duration_hours: parseFloat(e.target.value) || 0})} />
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">Workers Idle</label>
               <input type="number" className="w-full p-2 border border-gray-200 rounded-lg text-sm" 
-                value={formData.workers_idle || 0} 
-                onChange={(e) => setFormData({...formData, workers_idle: parseInt(e.target.value) || 0})} />
+                value={formData.workers_idle} onChange={(e) => setFormData({...formData, workers_idle: parseInt(e.target.value) || 0})} />
             </div>
           </div>
         </div>
       )}
 
+      {/* PHOTOS TAB */}
       {activeTab === 'photos' && (
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 space-y-4">
           <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
             <Image className="h-4 w-4 text-blue-500" /> Site Photos
           </h3>
           <div className="border-2 border-dashed border-gray-200 rounded-lg p-6 text-center">
-            <p className="text-sm text-gray-500">Upload site photos here (coming soon)</p>
+            <input type="file" multiple accept="image/*" onChange={handlePhotoUpload} className="hidden" id="photo-upload" />
+            <label htmlFor="photo-upload" className="cursor-pointer flex flex-col items-center gap-2">
+              <Plus className="h-8 w-8 text-gray-400" />
+              <p className="text-sm text-gray-500">Click to upload photos</p>
+            </label>
           </div>
+          {photos.length > 0 && (
+            <div className="grid grid-cols-3 gap-3 mt-4">
+              {photos.map((photo, idx) => (
+                <div key={idx} className="relative rounded-lg overflow-hidden border border-gray-200">
+                  <img src={photo.url} alt={photo.name} className="w-full h-24 object-cover" />
+                  <button onClick={() => removePhoto(idx)} className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1">
+                    <Trash2 className="h-3 w-3" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
-    </div>
-            Submitting...
-          </>
-        ) : (
-          <>
-            <Send className="h-4 w-4" />
-            Submit Daily Log for Approval
-          </>
-        )}
+
+      {/* SUBMIT BUTTON */}
+      <button
+        onClick={handleSubmit}
+        disabled={submitting || !workDescription.trim() || boqEntries.length === 0}
+        className="w-full bg-gradient-to-r from-orange-500 to-amber-600 text-white py-3.5 rounded-xl text-sm font-semibold hover:from-orange-600 hover:to-amber-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg flex items-center justify-center gap-2 mt-6"
+      >
+        {submitting ? 'Submitting...' : 'Submit Daily Log for Approval'}
       </button>
-      
-      {!workDescription.trim() && (
-        <div className="flex items-center justify-center gap-2 p-3 bg-amber-50 rounded-xl border border-amber-200">
-          <AlertCircle className="h-4 w-4 text-amber-500" />
-          <p className="text-xs text-amber-700 font-medium">
-            Please add a Work Description in the "Work" tab before submitting
-          </p>
-        </div>
-      )}
-      
-      {workDescription.trim() && boqEntries.length === 0 && (
-        <div className="flex items-center justify-center gap-2 p-3 bg-blue-50 rounded-xl border border-blue-200">
-          <AlertCircle className="h-4 w-4 text-blue-500" />
-          <p className="text-xs text-blue-700 font-medium">
-            Please add at least one BOQ entry in the "BOQ Progress" tab before submitting
-          </p>
-        </div>
-      )}
+
     </div>
   );
 }
