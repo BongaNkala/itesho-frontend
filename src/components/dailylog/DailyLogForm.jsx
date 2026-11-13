@@ -79,8 +79,9 @@ function DailyLogForm({ projectId, onSuccess }) {
         setError(null);
         setInfo(null);
       }, 5000);
-      
-  
+    }
+  }, [success, error, info]);
+
   const handlePhotoUpload = (e) => {
     const files = Array.from(e.target.files);
     files.forEach(file => {
