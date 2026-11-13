@@ -112,7 +112,7 @@ export default function ComplianceGatekeeper({ projectId, projectName, onAccessG
             {hasAccess ? <Unlock className="h-6 w-6 text-green-400" /> : <Lock className="h-6 w-6 text-red-500" />}
             Compliance Gatekeeper
           </h2>
-          <p className="text-sm text-slate-400 mt-1">Project: {projectName}</p>
+          <p className="text-sm text-slate-400 mt-1">Project: {projectName || 'Assigned Project'}</p>
         </div>
         <div className={`px-3 py-1 rounded-full text-xs font-bold ${hasAccess ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
           {hasAccess ? '✅ Access Granted' : '⛔ Access Denied'}
@@ -126,32 +126,42 @@ export default function ComplianceGatekeeper({ projectId, projectName, onAccessG
       </div>
 
       <div className="space-y-3">
-        {requirements.map(req => (
-          <div key={req.id} className={`p-4 rounded-lg border ${req.status === 'approved' ? 'bg-green-500/10 border-green-500/30' : 'bg-slate-800 border-slate-700'}`}>
-            <div className="flex justify-between items-start">
-              <div className="flex-1">
-                <div className="font-semibold flex items-center gap-2">
-                  {req.title} 
-                  {req.is_mandatory && <span className="text-[10px] bg-red-500/20 text-red-400 px-2 py-0.5 rounded">MANDATORY</span>}
+        {requirements.length === 0 ? (
+          <div className="text-center py-6 text-slate-400">
+            <Shield className="h-8 w-8 mx-auto mb-2 opacity-50" />
+            <p>No specific compliance requirements assigned to this project.</p>
+            <button onClick={() => { setShowModal(true); setSelectedReq({id: 1, title: 'General Document'}); }} className="mt-4 px-4 py-2 bg-orange-500 text-white rounded-lg flex items-center justify-center gap-2 mx-auto hover:bg-orange-600 transition">
+              <Upload className="h-4 w-4" /> Upload General Document
+            </button>
+          </div>
+        ) : (
+          requirements.map(req => (
+            <div key={req.id} className={`p-4 rounded-lg border ${req.status === 'approved' ? 'bg-green-500/10 border-green-500/30' : 'bg-slate-800 border-slate-700'}`}>
+              <div className="flex justify-between items-start">
+                <div className="flex-1">
+                  <div className="font-semibold flex items-center gap-2">
+                    {req.title} 
+                    {req.is_mandatory && <span className="text-[10px] bg-red-500/20 text-red-400 px-2 py-0.5 rounded">MANDATORY</span>}
+                  </div>
+                  <p className="text-xs text-slate-400 mt-1">{req.description}</p>
                 </div>
-                <p className="text-xs text-slate-400 mt-1">{req.description}</p>
-              </div>
-              <div className="flex flex-col items-end gap-2">
-                <span className={`text-xs px-2 py-1 rounded font-medium ${req.status === 'approved' ? 'text-green-400' : req.status === 'submitted' ? 'text-yellow-400' : 'text-red-400'}`}>
-                  {req.status.toUpperCase()}
-                </span>
-                {(req.status === 'pending' || req.status === 'rejected') && (
-                  <button 
-                    onClick={() => { setSelectedReq(req); setShowModal(true); }}
-                    className="flex items-center gap-1 text-xs bg-orange-500 hover:bg-orange-600 text-white px-3 py-1.5 rounded-lg transition"
-                  >
-                    <Upload className="h-3 w-3" /> Upload
-                  </button>
-                )}
+                <div className="flex flex-col items-end gap-2">
+                  <span className={`text-xs px-2 py-1 rounded font-medium ${req.status === 'approved' ? 'text-green-400' : req.status === 'submitted' ? 'text-yellow-400' : 'text-red-400'}`}>
+                    {req.status.toUpperCase()}
+                  </span>
+                  {(req.status === 'pending' || req.status === 'rejected') && (
+                    <button 
+                      onClick={() => { setSelectedReq(req); setShowModal(true); }}
+                      className="flex items-center gap-1 text-xs bg-orange-500 hover:bg-orange-600 text-white px-3 py-1.5 rounded-lg transition"
+                    >
+                      <Upload className="h-3 w-3" /> Upload
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
 
       {hasAccess ? (
