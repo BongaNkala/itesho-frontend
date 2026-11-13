@@ -80,16 +80,16 @@ function DailyLogForm({ projectId, onSuccess }) {
         setInfo(null);
       }, 5000);
       
+  
   const handlePhotoUpload = (e) => {
     const files = Array.from(e.target.files);
     files.forEach(file => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPhotos(prev => [...prev, { name: file.name, url: reader.result }]);
-      };
-      reader.readAsDataURL(file);
+      // Create a preview URL for the UI
+      const previewUrl = URL.createObjectURL(file);
+      setPhotos(prev => [...prev, { name: file.name, url: previewUrl, file: file }]);
     });
   };
+
 
   const removePhoto = (index) => {
     setPhotos(prev => prev.filter((_, i) => i !== index));
@@ -399,7 +399,7 @@ function DailyLogForm({ projectId, onSuccess }) {
         project: projectIdNum,
         log_date: date,
         work_description: workDescription,
-        photos: photos.map(p => p.url),
+        photos: uploadedUrls,
         weather: weather.condition,
         temperature: weather.temperature ? parseFloat(weather.temperature) : null,
         status: 'submitted'
