@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Shield, CheckCircle, XCircle, Clock, Upload, FileText, AlertTriangle, ArrowRight, Lock, Unlock, Loader2, MapPin, Plus } from 'lucide-react';
+import { Shield, CheckCircle, XCircle, Clock, Upload, FileText, AlertTriangle, ArrowRight, Lock, Unlock, Loader2, MapPin, Plus, Info } from 'lucide-react';
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://bongankala.pythonanywhere.com';
 
@@ -10,7 +10,6 @@ export default function ComplianceGatekeeper({ projectId, projectName, onAccessG
   const [hasAccess, setHasAccess] = useState(false);
   const [stats, setStats] = useState({ total: 0, approved: 0, pending: 0 });
   
-  // Upload Modal State
   const [showModal, setShowModal] = useState(false);
   const [selectedReq, setSelectedReq] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -66,9 +65,7 @@ export default function ComplianceGatekeeper({ projectId, projectName, onAccessG
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setFormData(prev => ({ ...prev, document_name: file.name }));
-    }
+    if (file) setFormData(prev => ({ ...prev, document_name: file.name }));
   };
 
   const handleSubmitRequirement = async (e) => {
@@ -84,13 +81,13 @@ export default function ComplianceGatekeeper({ projectId, projectName, onAccessG
           requirement_id: selectedReq.id,
           notes: formData.notes,
           document_name: formData.document_name,
-          document_url: 'https://example.com/dummy-doc.pdf' // Dummy URL for now
+          document_url: 'https://example.com/dummy-doc.pdf'
         })
       });
       
       if (res.ok) {
         setShowModal(false);
-        fetchData(); // Refresh the list to show "Submitted"
+        fetchData();
       } else {
         alert('Failed to submit requirement');
       }
@@ -99,6 +96,21 @@ export default function ComplianceGatekeeper({ projectId, projectName, onAccessG
     } finally {
       setUploading(false);
     }
+  };
+
+  // Helper to format the requirement type nicely
+  const formatDocType = (type) => {
+    const map = {
+      'certificate': 'Certificate / License',
+      'training': 'Training Certificate',
+      'insurance': 'Insurance Policy',
+      'safety_cert': 'Safety Certification',
+      'contract': 'Signed Contract',
+      'background_check': 'Background Check',
+      'induction': 'Site Induction Record',
+      'other': 'Supporting Document'
+    };
+    return map[type] || 'Document';
   };
 
   if (loading) return <div className="p-8 text-center text-slate-400"><Loader2 className="h-8 w-8 animate-spin mx-auto mb-2" /> Loading compliance...</div>;
@@ -127,10 +139,10 @@ export default function ComplianceGatekeeper({ projectId, projectName, onAccessG
 
       <div className="space-y-3">
         {requirements.length === 0 ? (
-          <div className="text-center py-6 text-slate-400">
+          <div className="text-center py-6 text-slate-400 border border-dashed border-slate-700 rounded-xl">
             <Shield className="h-8 w-8 mx-auto mb-2 opacity-50" />
             <p>No specific compliance requirements assigned to this project.</p>
-            <button onClick={() => { setShowModal(true); setSelectedReq({id: 1, title: 'General Document'}); }} className="mt-4 px-4 py-2 bg-orange-500 text-white rounded-lg flex items-center justify-center gap-2 mx-auto hover:bg-orange-600 transition">
+            <button onClick={() => { setShowModal(true); setSelectedReq({id: 1, title: 'General Document', requirement_type: 'other'}); }} className="mt-4 px-4 py-2 bg-orange-500 text-white rounded-lg flex items-center justify-center gap-2 mx-auto hover:bg-orange-600 transition">
               <Upload className="h-4 w-4" /> Upload General Document
             </button>
           </div>
@@ -143,7 +155,13 @@ export default function ComplianceGatekeeper({ projectId, projectName, onAccessG
                     {req.title} 
                     {req.is_mandatory && <span className="text-[10px] bg-red-500/20 text-red-400 px-2 py-0.5 rounded">MANDATORY</span>}
                   </div>
-                  <p className="text-xs text-slate-400 mt-1">{req.description}</p>
+                  
+                  {/* THIS IS THE NEW HINT */}
+                  <div className="flex items-center gap-1 text-xs text-sky-400 mt-1 mb-2">
+                    <Info className="h-3 w-3" /> Required: {formatDocType(req.requirement_type)}
+                  </div>
+                  
+                  <p className="text-xs text-slate-400">{req.description}</p>
                 </div>
                 <div className="flex flex-col items-end gap-2">
                   <span className={`text-xs px-2 py-1 rounded font-medium ${req.status === 'approved' ? 'text-green-400' : req.status === 'submitted' ? 'text-yellow-400' : 'text-red-400'}`}>
@@ -179,7 +197,14 @@ export default function ComplianceGatekeeper({ projectId, projectName, onAccessG
       {showModal && selectedReq && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
           <div className="bg-slate-800 rounded-xl max-w-md w-full p-6 shadow-2xl border border-slate-700">
-            <h3 className="text-lg font-bold text-white mb-4">Upload: {selectedReq.title}</h3>
+            <h3 className="text-lg font-bold text-white mb-1">Upload Document</h3>
+            <p className="text-xs text-slate-400 mb-4">{selectedReq.title}</p>
+
+            <div className="bg-sky-500/10 border border-sky-500/20 p-3 rounded-lg mb-4 flex items-start gap-2">
+              <Info className="h-4 w-4 text-sky-400 mt-0.5" />
+              <p className="text-xs text-sky-200">You must upload a valid <strong>{formatDocType(selectedReq.requirement_type)}</strong> to satisfy this requirement.</p>
+            </div>
+
             <form onSubmit={handleSubmitRequirement} className="space-y-4">
               <div>
                 <label className="text-xs text-slate-400 mb-1 block">Select File</label>
@@ -192,7 +217,7 @@ export default function ComplianceGatekeeper({ projectId, projectName, onAccessG
               <div className="flex justify-end gap-3 pt-4">
                 <button type="button" onClick={() => setShowModal(false)} className="px-4 py-2 text-sm text-slate-300 hover:text-white">Cancel</button>
                 <button type="submit" disabled={uploading || !formData.document_name} className="px-4 py-2 bg-orange-500 text-white rounded-lg text-sm font-medium hover:bg-orange-600 disabled:opacity-50 flex items-center gap-2">
-                  {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />} Submit
+                  {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />} Submit for Approval
                 </button>
               </div>
             </form>
