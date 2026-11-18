@@ -152,7 +152,7 @@ function MainLayout() {
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000"
         style={{
-          backgroundImage: 'url(https://grazia-prod.oss-ap-southeast-1.aliyuncs.com/resources/uid_100011502/1889.png)',
+          backgroundImage: 'url(/dash-bg.webp)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           transform: `translate(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.02}px)`,
