@@ -254,16 +254,7 @@ function Dashboard() {
   }
 
   return (
-    <div className="relative min-h-screen">
-      {/* Universal Full-Screen Background */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('/dash-bg.webp')" }}
-      />
-      <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-black/20 to-black/50 pointer-events-none" />
-      
-      {/* Content Wrapper */}
-      <div className="relative z-10 p-6 space-y-6">
+    <div className="space-y-6">
 
 
       {/* Header */}
