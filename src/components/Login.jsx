@@ -75,7 +75,7 @@ function Login() {
     <div 
       className="min-h-screen flex overflow-hidden relative"
       style={{
-        backgroundImage: 'url(https://grazia-prod.oss-ap-southeast-1.aliyuncs.com/resources/uid_100011502/9035.png)',
+        backgroundImage: 'url(/login-bg.webp)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundAttachment: 'fixed'
