@@ -254,7 +254,14 @@ function Dashboard() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="relative min-h-screen">
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: "url('/dash-bg.webp')" }}
+      />
+      <div className="relative z-10 p-6 space-y-6">
+
       {/* Header */}
       <div>
         <div className="flex items-center gap-2 mb-1">
@@ -587,6 +594,7 @@ function Dashboard() {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
